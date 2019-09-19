@@ -12,11 +12,14 @@ import com.miller.CollectionsConstant
 class FirestoreDataSource(
     private val firestore: FirebaseFirestore
 ) {
-    fun saveRegistrationToken(token: String): Task<Void> =
-        firestore.collection(CollectionsConstant.USERS)
-            .document("trunghq")
+
+    fun saveRegistrationToken(token: String, uid: String): Task<Void> {
+        return firestore.collection(CollectionsConstant.USERS)
+            .document(uid)
             .update(
                 CollectionsConstant.UserConstant.NOTIFICATION_TOKENS,
                 FieldValue.arrayUnion(token)
             )
+    }
+
 }

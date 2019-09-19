@@ -10,7 +10,7 @@ class SharedPrefDataSource(
 
     fun saveUserId(uid: String) = sharedPrefApi.set(KEY_USER_ID, uid)
 
-    fun readUserId() = sharedPrefApi.get(KEY_USER_ID, "")
+    fun readUserId(): String = sharedPrefApi.get(KEY_USER_ID, "")
 
     companion object {
         const val KEY_USER_ID = "KEY_USER_ID"

@@ -7,10 +7,10 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.iid.FirebaseInstanceId
 import com.miller.conversations.ConversationsFragment
 import com.miller.futurechat.utils.ext.openAuthenActivity
 import com.miller.futurechat.utils.ext.openFragment
-import com.miller.futurechat.utils.ext.registerFCMInstanceId
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -20,10 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        registerFCMInstanceId()
         openAuthenActivity()
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -36,6 +33,7 @@ class MainActivity : AppCompatActivity() {
                 FirebaseAuth.getInstance().currentUser?.uid?.let {
                     viewModel.saveUserIdToSharedPref(it)
                 }
+                registerFCMInstanceId()
                 openFragment(ConversationsFragment.newInstance(), R.id.container)
             } else {
                 if (response == null) {
@@ -43,6 +41,22 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun registerFCMInstanceId() {
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener {
+                if (!it.isSuccessful) {
+                    Log.d("----->", "MainActivity - onCreate : failed")
+                    return@addOnCompleteListener
+                }
+                it.result?.token?.let { token ->
+                    viewModel.saveFCMToken(token)
+                }
+            }
+            .addOnFailureListener {
+                it.printStackTrace()
+            }
     }
 
     companion object {
