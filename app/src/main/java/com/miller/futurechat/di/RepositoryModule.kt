@@ -1,7 +1,7 @@
 package com.miller.futurechat.di
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.miller.futurechat.livemessaging.data.repository.FirebaseRepository
+import com.miller.data.repository.FirebaseRepository
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.dsl.module
 
