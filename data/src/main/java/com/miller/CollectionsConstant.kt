@@ -5,8 +5,8 @@ package com.miller
  */
 
 object CollectionsConstant {
-    const val USERS = "users"
-    object UserConstant {
-        const val NOTIFICATION_TOKENS = "notificationTokens"
+    const val NOTIFICATION_TOKENS = "notificationTokens"
+    object NotificationTokensConstant {
+        const val TOKENS = "tokens"
     }
 }

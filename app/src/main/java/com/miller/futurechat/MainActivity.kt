@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
                     return@addOnCompleteListener
                 }
                 it.result?.token?.let { token ->
+                    Log.d("----->","MainActivity - registerFCMInstanceId : $token")
                     viewModel.saveFCMToken(token)
                 }
             }
