@@ -2,6 +2,7 @@ package com.miller.futurechat
 
 import android.app.Application
 import com.miller.futurechat.di.repositoryModule
+import com.miller.futurechat.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -14,7 +15,7 @@ class MainApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@MainApplication)
-            modules(listOf(repositoryModule))
+            modules(listOf(repositoryModule, viewModelModule))
         }
     }
 }

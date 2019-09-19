@@ -2,7 +2,7 @@ package com.miller.futurechat
 
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
-import com.miller.data.repository.FirebaseRepository
+import com.miller.repository.FirebaseRepository
 import org.koin.android.ext.android.inject
 
 class AppFirebaseMessagingService : FirebaseMessagingService() {

@@ -6,12 +6,16 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.auth.FirebaseAuth
 import com.miller.conversations.ConversationsFragment
 import com.miller.futurechat.utils.ext.openAuthenActivity
 import com.miller.futurechat.utils.ext.openFragment
 import com.miller.futurechat.utils.ext.registerFCMInstanceId
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +33,9 @@ class MainActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-                Log.d("----->", "MainActivity - onActivityResult : success")
+                FirebaseAuth.getInstance().currentUser?.uid?.let {
+                    viewModel.saveUserIdToSharedPref(it)
+                }
                 openFragment(ConversationsFragment.newInstance(), R.id.container)
             } else {
                 if (response == null) {

@@ -1,4 +1,4 @@
-package com.miller.data
+package com.miller
 
 /**
  * Created by Miller on 18/09/2019
