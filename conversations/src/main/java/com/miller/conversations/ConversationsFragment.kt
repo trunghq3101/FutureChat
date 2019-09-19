@@ -17,7 +17,7 @@ class ConversationsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_conversations, container, false)
+        return inflater.inflate(R.layout.conversations_fragment_main, container, false)
     }
 
     companion object {
