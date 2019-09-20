@@ -1,32 +1,18 @@
 package com.miller.futurechat.utils.ext
 
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.firebase.ui.auth.AuthUI
-import com.google.firebase.iid.FirebaseInstanceId
 import com.miller.futurechat.MainActivity
 
 /**
  * Created by Miller on 19/09/2019
  */
 
-fun AppCompatActivity.registerFCMInstanceId() {
-    FirebaseInstanceId.getInstance().instanceId
-        .addOnCompleteListener {
-            if (!it.isSuccessful) {
-                Log.d("----->","MainActivity - onCreate : failed")
-                return@addOnCompleteListener
-            }
-            Log.d("----->","MainActivity - onCreate : ${it.result?.token}")
-        }
-        .addOnFailureListener {
-            it.printStackTrace()
-        }
-}
-
 fun AppCompatActivity.openAuthenActivity() {
     val providers = arrayListOf(
-        AuthUI.IdpConfig.EmailBuilder().build())
+        AuthUI.IdpConfig.EmailBuilder().build()
+    )
     startActivityForResult(
         AuthUI.getInstance()
             .createSignInIntentBuilder()
@@ -34,4 +20,17 @@ fun AppCompatActivity.openAuthenActivity() {
             .build(),
         MainActivity.REQ_CODE_SIGN_IN
     )
+}
+
+fun AppCompatActivity.openFragment(
+    fragment: Fragment,
+    containerId: Int,
+    addToBackStack: Boolean? = false,
+    tag: String? = null
+) {
+    supportFragmentManager.beginTransaction().apply {
+        add(containerId, fragment, tag)
+        if (addToBackStack == true) addToBackStack(tag)
+        commit()
+    }
 }
