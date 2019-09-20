@@ -1,6 +1,7 @@
 apply from: "$rootDir/common-android.gradle"
 
 dependencies {
+    implementation project(':conversations')
     // Firestore
     implementation 'com.google.firebase:firebase-firestore:21.1.1'
 }

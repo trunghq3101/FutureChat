@@ -1,9 +1,11 @@
 package com.miller.futurechat.di
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.miller.conversations.repository.ConversationsRepository
 import com.miller.datasource.firebase.FirestoreDataSource
 import com.miller.datasource.sharePref.SharedPrefApi
 import com.miller.datasource.sharePref.SharedPrefDataSource
+import com.miller.repository.ConversationsRepositoryImpl
 import com.miller.repository.FirebaseRepository
 import com.miller.repository.UserRepository
 import io.reactivex.disposables.CompositeDisposable
@@ -24,4 +26,5 @@ val repositoryModule = module {
 
     single { FirebaseRepository(get()) }
     single { UserRepository(get()) }
+    single<ConversationsRepository> { ConversationsRepositoryImpl() }
 }
