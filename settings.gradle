@@ -1,2 +1,2 @@
-include ':app', ':mockretrofitinterceptor', ':data', ':conversations', ':common'
+include ':app', ':mockretrofitinterceptor', ':data', ':conversations', ':common', ':messaging'
 rootProject.name='futurechat'

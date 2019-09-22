@@ -13,6 +13,8 @@ class MainViewModel(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
+    fun readUserIdFromSharedPref() = userRepository.readUserId()
+
     fun saveUserIdToSharedPref(uid: String) {
         userRepository.saveUserId(uid)
     }
