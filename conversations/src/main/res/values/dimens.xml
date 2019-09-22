@@ -2,4 +2,5 @@
 <resources>
     <dimen name="conversations_avatar_padding_hor">18dp</dimen>
     <dimen name="conversations_item_padding_ver">18dp</dimen>
+    <dimen name="conversations_content_margin_right">64dp</dimen>
 </resources>

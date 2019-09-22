@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/color_white"
         android:paddingTop="@dimen/conversations_item_padding_ver"
         android:paddingBottom="@dimen/conversations_item_padding_ver">
 
@@ -36,7 +37,7 @@
             style="@style/TextTitle1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="64dp"
+            android:layout_marginEnd="@dimen/conversations_content_margin_right"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{ item.title }"
