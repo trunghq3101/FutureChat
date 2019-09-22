@@ -26,5 +26,5 @@ val repositoryModule = module {
 
     single { FirebaseRepository(get()) }
     single { UserRepository(get()) }
-    single<ConversationsRepository> { ConversationsRepositoryImpl() }
+    single<ConversationsRepository> { ConversationsRepositoryImpl(get(), get()) }
 }
