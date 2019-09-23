@@ -39,9 +39,6 @@ class ConversationsFragment :
             conversations.observe(viewLifecycleOwner, Observer {
                 conversationAdapter.submitList(it)
             })
-            triggerOpenDetail.observe(viewLifecycleOwner, Observer {
-                navigate(ConversationsFragmentDirections.actionConversationsToMessaging())
-            })
         }
     }
 

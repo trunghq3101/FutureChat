@@ -19,8 +19,6 @@ class ConversationsViewModel(
     private val _conversations = MutableLiveData<List<ConversationItem>>()
     val conversations: LiveData<List<ConversationItem>> = _conversations
 
-    val triggerOpenDetail = SingleLiveEvent<String>()
-
     fun fetchConversations() {
         conversationsRepository.fetchConversations()
             .compose(SchedulersUtils.applyAsyncSchedulersSingle())
