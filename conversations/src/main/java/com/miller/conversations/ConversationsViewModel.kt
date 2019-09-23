@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.miller.common.base.BaseViewModel
 import com.miller.common.utils.SchedulersUtils
+import com.miller.common.utils.SingleLiveEvent
 import com.miller.conversations.model.ConversationItem
 import com.miller.conversations.repository.ConversationsRepository
 

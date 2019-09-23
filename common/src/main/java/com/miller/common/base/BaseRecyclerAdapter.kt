@@ -50,6 +50,8 @@ abstract class BaseRecyclerAdapter<Item, ViewBinding : ViewDataBinding>(
         holder.binding.executePendingBindings()
     }
 
+    fun getItemAt(position: Int): Item = super.getItem(position)
+
     /**
      * get layout res based on view type
      */

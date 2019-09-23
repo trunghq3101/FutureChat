@@ -1,0 +1,9 @@
+apply from: "$rootDir/common-android-ui.gradle"
+
+android {
+    resourcePrefix "messaging_"
+}
+
+dependencies {
+    implementation project(":common")
+}
