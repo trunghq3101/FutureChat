@@ -1,15 +1,12 @@
 package com.miller.conversations
 
 import android.os.Bundle
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.miller.common.base.BaseFragment
-import com.miller.common.ext.openFragment
 import com.miller.conversations.databinding.ConversationsFragmentMainBinding
 import kotlinx.android.synthetic.main.conversations_fragment_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -18,7 +15,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * Created by Miller on 19/09/2019
  */
 
-class ConversationsFragment : BaseFragment<ConversationsFragmentMainBinding>() {
+class ConversationsFragment :
+    BaseFragment<ConversationsFragmentMainBinding, ConversationsViewModel>() {
     override val layoutId: Int = R.layout.conversations_fragment_main
     override val viewModel: ConversationsViewModel by viewModel()
     override val bindingVar: Int = BR.viewModel
@@ -33,6 +31,18 @@ class ConversationsFragment : BaseFragment<ConversationsFragmentMainBinding>() {
         setupView()
         observeField()
         loadData()
+    }
+
+    override fun observeField() {
+        super.observeField()
+        with(viewModel) {
+            conversations.observe(viewLifecycleOwner, Observer {
+                conversationAdapter.submitList(it)
+            })
+            triggerOpenDetail.observe(viewLifecycleOwner, Observer {
+                navigate(ConversationsFragmentDirections.actionConversationsToMessaging())
+            })
+        }
     }
 
     private fun setupView() {
@@ -53,20 +63,5 @@ class ConversationsFragment : BaseFragment<ConversationsFragmentMainBinding>() {
 
     private fun loadData() {
         viewModel.fetchConversations()
-    }
-
-    private fun observeField() {
-        with(viewModel) {
-            conversations.observe(viewLifecycleOwner, Observer {
-                conversationAdapter.submitList(it)
-            })
-            triggerOpenDetail.observe(viewLifecycleOwner, Observer {
-
-            })
-        }
-    }
-
-    companion object {
-        fun newInstance() = ConversationsFragment()
     }
 }

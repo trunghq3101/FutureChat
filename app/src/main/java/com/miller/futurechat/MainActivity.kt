@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
+import com.miller.common.ext.openFragment
 import com.miller.conversations.ConversationsFragment
 import com.miller.futurechat.utils.ext.openAuthenActivity
-import com.miller.futurechat.utils.ext.openFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == REQ_CODE_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
 
@@ -66,7 +65,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun loggedIn() {
         registerFCMInstanceId()
-        openFragment(ConversationsFragment.newInstance(), R.id.container)
     }
 
     companion object {
