@@ -5,6 +5,7 @@ import androidx.navigation.NavDirections
 import com.miller.common.navigation.NavigationCommand
 import com.miller.common.utils.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 /**
  * Created by Miller on 20/09/2019
@@ -16,6 +17,10 @@ abstract class BaseViewModel : ViewModel() {
 
     fun navigate(directions: NavDirections) {
         navCommands.postValue(NavigationCommand.To(directions))
+    }
+
+    fun addDisposable(disposable: Disposable) {
+        compositeDisposable.add(disposable)
     }
 
     override fun onCleared() {

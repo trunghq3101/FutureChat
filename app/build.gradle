@@ -86,6 +86,19 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // For inject koin to tests
+    androidTestImplementation 'org.koin:koin-test:2.0.1'
+
+    // For running InstantTaskExecutorRule
+    androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
+
+    // For mock
+    // Use 1.9.2 because there are bugs in 1.9.3
+    androidTestImplementation 'io.mockk:mockk-android:1.9.2'
+
+    // MockWebServer
+    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
