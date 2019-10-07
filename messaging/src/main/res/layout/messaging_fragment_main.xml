@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -12,6 +13,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_white">
+
+        <EditText
+            android:id="@+id/inputMessaging"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/messaging_input_text_margin_start"
+            android:layout_marginEnd="@dimen/messaging_side_margin"
+            android:layout_marginBottom="@dimen/messaging_bottom_margin"
+            android:background="@drawable/messaging_input_text_bg"
+            android:hint="@string/messaging_input_text_hint"
+            android:inputType="textMultiLine"
+            android:paddingRight="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/iconEmoji"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/messaging_emoji_margin"
+            android:layout_marginEnd="@dimen/messaging_emoji_margin"
+            android:layout_marginBottom="@dimen/messaging_emoji_margin"
+            android:tint="@color/color_grey"
+            app:layout_constraintBottom_toBottomOf="@id/inputMessaging"
+            app:layout_constraintEnd_toEndOf="@id/inputMessaging"
+            app:srcCompat="@drawable/messaging_ic_calm" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

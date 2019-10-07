@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">messaging</string>
+    <string name="messaging_input_text_hint">Aa</string>
 </resources>
