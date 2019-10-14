@@ -1,9 +1,8 @@
 package com.miller.futurechat.di
 
-import com.miller.conversations.repository.ConversationsRepository
-import com.miller.repository.ConversationsRepositoryImpl
-import com.miller.repository.FirebaseRepository
-import com.miller.repository.UserRepository
+import com.miller.core.data.repository.AuthenticationRepository
+import com.miller.core.data.repository.ConversationRepository
+import com.miller.core.data.repository.NotificationTokenRepository
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.dsl.module
 
@@ -14,7 +13,7 @@ import org.koin.dsl.module
 val repositoryModule = module {
     factory { CompositeDisposable() }
 
-    single { FirebaseRepository(get()) }
-    single { UserRepository(get()) }
-    single<ConversationsRepository> { ConversationsRepositoryImpl(get(), get()) }
+    single { ConversationRepository(get()) }
+    single { NotificationTokenRepository(get()) }
+    single { AuthenticationRepository(get()) }
 }

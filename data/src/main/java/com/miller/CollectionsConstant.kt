@@ -7,6 +7,7 @@ package com.miller
 object CollectionsConstant {
     const val NOTIFICATION_TOKENS = "notificationTokens"
     const val CONVERSATIONS = "conversations"
+    const val MESSAGES = "messages"
     object NotificationTokensConstant {
         const val TOKENS = "tokens"
     }

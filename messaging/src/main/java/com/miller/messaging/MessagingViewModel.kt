@@ -1,10 +1,38 @@
 package com.miller.messaging
 
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.miller.common.base.BaseViewModel
+import com.miller.common.utils.EditTextBindingUtils
 
 class MessagingViewModel : BaseViewModel() {
-    fun triggerEmojiDialog() {
-        Log.d("------>"," : emoji")
+
+    val onInputTextExistListener = object : EditTextBindingUtils.OnTextExistListener {
+        override fun onTextEmpty() {
+            changeSendButtonVisibility(false)
+        }
+
+        override fun onTextExist() {
+            changeSendButtonVisibility(true)
+        }
+    }
+
+    /*
+    Observables
+     */
+    private val _isSendBtnVisible = MutableLiveData<Boolean>().apply { value = false }
+    val isSendBtnVisible: LiveData<Boolean> = _isSendBtnVisible
+
+    val textMsg = MutableLiveData<String>()
+    /*
+    ============
+     */
+
+    fun changeSendButtonVisibility(isVisible: Boolean) {
+        _isSendBtnVisible.value = isVisible
+    }
+
+    fun sendMsg() {
+
     }
 }

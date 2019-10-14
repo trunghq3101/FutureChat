@@ -1,13 +1,17 @@
-package com.miller.futurechat
+package com.miller.futurechat.presentation.login
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
+import com.miller.core.domain.model.User
+import com.miller.core.usecases.model.AuthState
+import com.miller.futurechat.R
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
@@ -25,14 +29,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
+        Log.d("------>"," : onCreate")
         observeField()
-
-        if (viewModel.readUserIdFromSharedPref().isNotEmpty()) {
-            loggedIn()
-        } else {
-            openFirebaseAuthActivity()
-        }
+        viewModel.loadLoggedInStatus()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -44,9 +43,9 @@ class LoginActivity : AppCompatActivity() {
 
             if (resultCode == Activity.RESULT_OK) {
                 FirebaseAuth.getInstance().currentUser?.uid?.let {
-                    viewModel.saveUserIdToSharedPref(it)
+                    viewModel.saveAuthToken(it)
                 }
-                loggedIn()
+                registerFCMInstanceId()
             } else {
                 if (response == null) {
                     finish()
@@ -57,8 +56,17 @@ class LoginActivity : AppCompatActivity() {
 
     private fun observeField() {
         with(viewModel) {
+            loggedInStatus.observe(this@LoginActivity, Observer {
+                when (it) {
+                    is AuthState.LoggedIn -> registerFCMInstanceId()
+                    is AuthState.LoggedOut -> openFirebaseAuthActivity()
+                }
+            })
             fcmTokenSaved.observe(this@LoginActivity, Observer {
-                if (it) startActivity(mainIntent)
+                if (it) {
+                    finish()
+                    startActivity(mainIntent)
+                }
             })
         }
     }
@@ -83,10 +91,6 @@ class LoginActivity : AppCompatActivity() {
             .addOnFailureListener {
                 it.printStackTrace()
             }
-    }
-
-    private fun loggedIn() {
-        registerFCMInstanceId()
     }
 
     companion object {

@@ -40,6 +40,11 @@ abstract class BaseFragment<ViewBinding: ViewDataBinding, ViewModel: BaseViewMod
         observeField()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+
     @CallSuper
     open fun observeField() {
         with(viewModel) {
@@ -53,6 +58,9 @@ abstract class BaseFragment<ViewBinding: ViewDataBinding, ViewModel: BaseViewMod
             })
         }
     }
+
+    @CallSuper
+    open fun initView() {}
 
     private fun performDataBinding(inflater: LayoutInflater, container: ViewGroup?) {
         viewBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)

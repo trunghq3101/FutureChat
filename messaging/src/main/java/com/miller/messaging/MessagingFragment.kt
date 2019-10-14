@@ -8,4 +8,8 @@ class MessagingFragment : BaseFragment<MessagingFragmentMainBinding, MessagingVi
     override val layoutId: Int = R.layout.messaging_fragment_main
     override val viewModel: MessagingViewModel by viewModel()
     override val bindingVar: Int = BR.viewModel
+
+    override fun observeField() {
+        super.observeField()
+    }
 }

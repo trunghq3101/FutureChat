@@ -15,7 +15,7 @@ Here is how I will write this project:
 
 At the moment, this project is including:
 - Multi-module structure
-- A modified version of Clean Architecture which doesn't include Use Cases because of the scope of the project and my limited knowledge about architecture
+- Clean Architecture (by www.raywenderlich.com)
 - Cloud Firestore
 - Firebase Cloud Messaging
 - Firebase Authentication

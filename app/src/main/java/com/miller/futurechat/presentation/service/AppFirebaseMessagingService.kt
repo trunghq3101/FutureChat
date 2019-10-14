@@ -1,4 +1,4 @@
-package com.miller.futurechat
+package com.miller.futurechat.presentation.service
 
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService

@@ -1,10 +1,7 @@
-package com.miller.futurechat
+package com.miller.futurechat.presentation
 
 import android.app.Application
-import com.miller.futurechat.di.dataSourceModule
-import com.miller.futurechat.di.intentModule
-import com.miller.futurechat.di.repositoryModule
-import com.miller.futurechat.di.viewModelModule
+import com.miller.futurechat.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -17,7 +14,7 @@ class MainApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@MainApplication)
-            modules(listOf(intentModule, dataSourceModule, repositoryModule, viewModelModule))
+            modules(listOf(useCasesModule, intentModule, dataSourceModule, repositoryModule, viewModelModule))
         }
     }
 }
