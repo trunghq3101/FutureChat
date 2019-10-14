@@ -9,7 +9,7 @@
         android:id="@+id/conversationsFragment"
         android:name="com.miller.futurechat.presentation.conversations.ConversationsFragment"
         android:label="fragment_conversations"
-        tools:layout="@layout/conversations_fragment_main">
+        tools:layout="@layout/fragment_conversations">
         <action
             android:id="@+id/action_conversations_to_messaging"
             app:destination="@id/messagingFragment" />
@@ -19,6 +19,10 @@
         android:id="@+id/messagingFragment"
         android:name="com.miller.futurechat.presentation.messaging.MessagingFragment"
         android:label="fragment_messaging"
-        tools:layout="@layout/messaging_fragment_main" />
+        tools:layout="@layout/fragment_messaging" >
+        <argument
+            android:name="conversationId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

@@ -1,15 +1,13 @@
 package com.miller.futurechat.presentation.conversations
 
-import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import com.miller.common.base.BaseFragment
 import com.miller.futurechat.BR
 import com.miller.futurechat.R
 import com.miller.futurechat.databinding.FragmentConversationsBinding
+import com.miller.futurechat.presentation.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_conversations.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -21,11 +19,6 @@ class ConversationsFragment : BaseFragment<FragmentConversationsBinding, Convers
     private val conversationAdapter = ConversationAdapter()
     private val gestureDetector by lazy {
         GestureDetector(context, ConversationGestureListener(recyclerConversations, viewModel))
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.loadConversations()
     }
 
     override fun initView() {
@@ -43,6 +36,8 @@ class ConversationsFragment : BaseFragment<FragmentConversationsBinding, Convers
             }
 
         })
+
+        viewModel.loadConversations()
     }
 
     override fun observeField() {

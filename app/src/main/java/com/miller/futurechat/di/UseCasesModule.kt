@@ -9,7 +9,8 @@ val useCasesModule = module {
             GetConversations(get(), get()),
             GetAuthState(get()),
             SaveAuthToken(get()),
-            AddNotificationToken(get())
+            AddNotificationToken(get()),
+            GetMessages(get(), get())
         )
     }
 }

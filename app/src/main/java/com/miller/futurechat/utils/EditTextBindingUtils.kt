@@ -1,4 +1,4 @@
-package com.miller.common.utils
+package com.miller.futurechat.utils
 
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener

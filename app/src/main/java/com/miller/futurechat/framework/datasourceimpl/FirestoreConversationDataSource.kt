@@ -14,9 +14,11 @@ class FirestoreConversationDataSource(
 ) : ConversationDataSource {
 
     override fun readAll(authToken: String): Single<List<Conversation>> {
-        return firestore.collection(CONVERSATIONS).whereArrayContains(FOLLOWERS, authToken).get()
-            .toSingle().map {
-            it.toItemList(Conversation::class.java)
-        }
+        return firestore.collection(CONVERSATIONS).whereArrayContains(FOLLOWERS, authToken)
+            .get()
+            .toSingle()
+            .map {
+                it.toItemList(Conversation::class.java)
+            }
     }
 }

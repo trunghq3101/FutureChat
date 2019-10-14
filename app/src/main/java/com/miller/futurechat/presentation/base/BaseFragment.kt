@@ -1,4 +1,4 @@
-package com.miller.common.base
+package com.miller.futurechat.presentation.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +11,8 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.miller.common.navigation.NavigationCommand.Back
-import com.miller.common.navigation.NavigationCommand.To
+import com.miller.futurechat.utils.NavigationCommand.Back
+import com.miller.futurechat.utils.NavigationCommand.To
 
 /**
  * Created by Miller on 20/09/2019

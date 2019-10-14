@@ -1,4 +1,4 @@
-package com.miller.common.base
+package com.miller.futurechat.presentation.base
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

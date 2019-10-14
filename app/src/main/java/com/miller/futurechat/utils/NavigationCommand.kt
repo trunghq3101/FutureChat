@@ -1,4 +1,4 @@
-package com.miller.common.navigation
+package com.miller.futurechat.utils
 
 import androidx.navigation.NavDirections
 

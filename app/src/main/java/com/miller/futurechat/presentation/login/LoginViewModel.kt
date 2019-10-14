@@ -1,9 +1,9 @@
 package com.miller.futurechat.presentation.login
 
 import android.util.Log
-import com.miller.common.base.BaseViewModel
-import com.miller.common.utils.SchedulersUtils.applyAsyncSchedulersSingle
-import com.miller.common.utils.SingleLiveEvent
+import com.miller.futurechat.presentation.base.BaseViewModel
+import com.miller.futurechat.utils.SchedulersUtils.applyAsyncSchedulersSingle
+import com.miller.futurechat.utils.SingleLiveEvent
 import com.miller.core.usecases.UseCases
 import com.miller.core.usecases.model.AuthState
 

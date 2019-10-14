@@ -1,4 +1,4 @@
-package com.miller.common.ext
+package com.miller.futurechat.utils
 
 import androidx.fragment.app.Fragment
 

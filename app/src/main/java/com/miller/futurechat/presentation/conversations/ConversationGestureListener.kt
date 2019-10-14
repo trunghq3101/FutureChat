@@ -16,7 +16,7 @@ class ConversationGestureListener(
                 val position = recyclerView.getChildAdapterPosition(it)
                 val conversationId =
                     (recyclerView.adapter as ConversationAdapter).getItemAt(position).id
-                viewModel.navigate(ConversationsFragmentDirections.actionConversationsToMessaging())
+                viewModel.navigate(ConversationsFragmentDirections.actionConversationsToMessaging(conversationId))
             }
         }
         return super.onSingleTapConfirmed(e)

@@ -1,4 +1,4 @@
-package com.miller.common.utils
+package com.miller.futurechat.utils
 
 import io.reactivex.SingleTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
