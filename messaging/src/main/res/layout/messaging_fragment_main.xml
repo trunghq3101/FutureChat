@@ -26,9 +26,11 @@
             android:inputType="textMultiLine"
             android:minHeight="@dimen/messaging_input_min_height"
             android:paddingEnd="@dimen/messaging_input_min_height"
+            android:text="@={ viewModel.textMsg }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/imageAdd"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:onTextExist="@{ viewModel.onInputTextExistListener }" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -55,10 +57,22 @@
             android:layout_width="@dimen/messaging_add_size"
             android:layout_height="0dp"
             android:background="?attr/selectableItemBackground"
+            app:booleanVisibility="@{ !viewModel.isSendBtnVisible }"
             app:layout_constraintBottom_toBottomOf="@id/inputMessaging"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/messaging_guideline"
             app:srcCompat="@drawable/messaging_ic_add" />
+
+        <ImageButton
+            android:id="@+id/imageSend"
+            android:layout_width="@dimen/messaging_add_size"
+            android:layout_height="0dp"
+            android:background="?attr/selectableItemBackground"
+            app:booleanVisibility="@{ viewModel.isSendBtnVisible }"
+            app:layout_constraintBottom_toBottomOf="@id/imageAdd"
+            app:layout_constraintEnd_toEndOf="@id/imageAdd"
+            app:layout_constraintTop_toTopOf="@id/imageAdd"
+            app:srcCompat="@drawable/messaging_ic_send" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/messaging_guideline"

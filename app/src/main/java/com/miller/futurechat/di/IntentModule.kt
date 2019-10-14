@@ -2,7 +2,7 @@ package com.miller.futurechat.di
 
 import android.content.Intent
 import com.firebase.ui.auth.AuthUI
-import com.miller.futurechat.MainActivity
+import com.miller.futurechat.presentation.MainActivity
 import com.miller.futurechat.di.IntentModule.AUTH_INTENT
 import com.miller.futurechat.di.IntentModule.MAIN_INTENT
 import org.koin.core.qualifier.named

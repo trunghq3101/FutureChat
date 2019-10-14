@@ -3,6 +3,7 @@ package com.miller.conversations
 import android.view.GestureDetector
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
+import com.miller.futurechat.presentation.conversations.ConversationsFragmentDirections
 
 class ConversationGestureListener(
     private val recyclerView: RecyclerView,

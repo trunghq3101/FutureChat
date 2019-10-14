@@ -23,6 +23,10 @@ abstract class BaseViewModel : ViewModel() {
         compositeDisposable.add(disposable)
     }
 
+    fun onLoadFail(t: Throwable?) {
+        t?.printStackTrace()
+    }
+
     override fun onCleared() {
         compositeDisposable.clear()
         super.onCleared()

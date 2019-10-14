@@ -3,7 +3,6 @@ package com.miller.repository
 import com.miller.conversations.model.ConversationItem
 import com.miller.conversations.repository.ConversationsRepository
 import com.miller.datasource.firebase.FirestoreDataSource
-import com.miller.datasource.sharePref.SharedPrefDataSource
 import io.reactivex.Single
 
 /**
@@ -11,12 +10,11 @@ import io.reactivex.Single
  */
 
 class ConversationsRepositoryImpl(
-    private val firestoreDataSource: FirestoreDataSource,
-    private val sharedPrefDataSource: SharedPrefDataSource
+    private val firestoreDataSource: FirestoreDataSource
 ) : ConversationsRepository {
 
     override fun fetchConversations(): Single<List<ConversationItem>> {
-        return firestoreDataSource.fetchConversations(sharedPrefDataSource.readUserId())
+        return firestoreDataSource.fetchConversations("")
     }
 
 }

@@ -1,11 +1,8 @@
-package com.miller.datasource.sharePref
+package com.miller.futurechat.framework.sharedPref
 
 import android.content.Context
 import android.content.SharedPreferences
-
-/**
- * Created by Miller on 19/09/2019
- */
+import com.google.gson.Gson
 
 class SharedPrefApi(private val context: Context) {
 
@@ -24,4 +21,17 @@ class SharedPrefApi(private val context: Context) {
     fun remove(key: String) = sharedPreferences.edit().apply { remove(key) }.apply()
 
     fun contains(key: String) = sharedPreferences.contains(key)
+
+    inline fun <reified T> setObject(key: String, value: T) = sharedPreferences.edit().apply {
+        putString(key, Gson().toJson(value))
+    }.apply()
+
+    inline fun <reified T> getObject(key: String): T? = run {
+        val data = get(key, "")
+        return if (data.isNullOrEmpty()) {
+            null
+        } else {
+            Gson().fromJson(data, T::class.java)
+        }
+    }
 }

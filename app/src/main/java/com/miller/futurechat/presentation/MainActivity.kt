@@ -1,7 +1,8 @@
-package com.miller.futurechat
+package com.miller.futurechat.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.miller.futurechat.R
 
 class MainActivity : AppCompatActivity() {
 

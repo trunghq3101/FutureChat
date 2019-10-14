@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/conversationsFragment"
-        android:name="com.miller.conversations.ConversationsFragment"
+        android:name="com.miller.futurechat.presentation.conversations.ConversationsFragment"
         android:label="fragment_conversations"
         tools:layout="@layout/conversations_fragment_main">
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/messagingFragment"
-        android:name="com.miller.messaging.MessagingFragment"
+        android:name="com.miller.futurechat.presentation.messaging.MessagingFragment"
         android:label="fragment_messaging"
         tools:layout="@layout/messaging_fragment_main" />
 

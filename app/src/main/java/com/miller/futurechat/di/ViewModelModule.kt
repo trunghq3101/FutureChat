@@ -1,8 +1,8 @@
 package com.miller.futurechat.di
 
-import com.miller.conversations.ConversationsViewModel
-import com.miller.futurechat.LoginViewModel
-import com.miller.messaging.MessagingViewModel
+import com.miller.futurechat.presentation.conversations.ConversationsViewModel
+import com.miller.futurechat.presentation.login.LoginViewModel
+import com.miller.futurechat.presentation.messaging.MessagingViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -11,7 +11,7 @@ import org.koin.dsl.module
  */
 
 val viewModelModule = module {
-    viewModel { LoginViewModel(get(), get()) }
+    viewModel { LoginViewModel(get()) }
     viewModel { ConversationsViewModel(get()) }
     viewModel { MessagingViewModel() }
 }
