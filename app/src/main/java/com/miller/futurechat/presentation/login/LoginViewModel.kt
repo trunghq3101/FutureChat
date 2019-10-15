@@ -1,9 +1,9 @@
 package com.miller.futurechat.presentation.login
 
 import android.util.Log
-import com.miller.common.base.BaseViewModel
-import com.miller.common.utils.SchedulersUtils.applyAsyncSchedulersSingle
-import com.miller.common.utils.SingleLiveEvent
+import com.miller.futurechat.presentation.base.BaseViewModel
+import com.miller.futurechat.utils.SchedulersUtils.applyAsyncSchedulersSingle
+import com.miller.futurechat.utils.SingleLiveEvent
 import com.miller.core.usecases.UseCases
 import com.miller.core.usecases.model.AuthState
 
@@ -14,6 +14,8 @@ import com.miller.core.usecases.model.AuthState
 class LoginViewModel(
     private val useCases: UseCases
 ) : BaseViewModel() {
+
+    var authToken: String? = null
 
     /*
     Observables
@@ -27,6 +29,7 @@ class LoginViewModel(
             .subscribe(
                 {
                     loggedInStatus.value = it
+                    authToken = (it as? AuthState.LoggedIn)?.token
                 },
                 {
                     loggedInStatus.value = AuthState.LoggedOut
@@ -41,10 +44,10 @@ class LoginViewModel(
             .compose(applyAsyncSchedulersSingle())
             .subscribe(
                 {
-
+                    authToken = it
                 },
                 {
-
+                    onLoadFail(it)
                 }
             ).apply {
                 addDisposable(this)
@@ -52,16 +55,15 @@ class LoginViewModel(
     }
 
     fun saveFCMToken(token: String) {
-        (loggedInStatus.value as? AuthState.LoggedIn)?.token?.let {
+        authToken?.let {
             useCases.addNotificationToken(token, it)
                 .compose(applyAsyncSchedulersSingle())
                 .subscribe(
                     {
                         fcmTokenSaved.value = true
                     },
-                    {
-                        it.printStackTrace()
-                        Log.d("------>"," : saveFCM error")
+                    { t ->
+                        onLoadFail(t)
                     }
                 ).apply {
                     addDisposable(this)

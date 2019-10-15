@@ -1,4 +1,4 @@
-package com.miller.common.utils
+package com.miller.futurechat.utils
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData

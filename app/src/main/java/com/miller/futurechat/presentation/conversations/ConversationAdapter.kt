@@ -1,7 +1,7 @@
 package com.miller.futurechat.presentation.conversations
 
 import androidx.recyclerview.widget.DiffUtil
-import com.miller.common.base.BaseRecyclerAdapter
+import com.miller.futurechat.presentation.base.BaseRecyclerAdapter
 import com.miller.futurechat.BR
 import com.miller.futurechat.R
 import com.miller.futurechat.databinding.ItemConversationBinding

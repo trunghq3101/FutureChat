@@ -3,8 +3,8 @@ package com.miller.futurechat.presentation.conversations
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.miller.common.base.BaseViewModel
-import com.miller.common.utils.SchedulersUtils
+import com.miller.futurechat.presentation.base.BaseViewModel
+import com.miller.futurechat.utils.SchedulersUtils
 import com.miller.core.usecases.UseCases
 import com.miller.futurechat.presentation.model.ConversationItem
 import com.miller.futurechat.presentation.model.mapToPresentation
