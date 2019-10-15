@@ -6,6 +6,4 @@ data class Conversation(
     val followers: List<String>,
     val title: String,
     val lastMessage: String
-) {
-    constructor() : this("", "", listOf(), "", "")
-}
+)
