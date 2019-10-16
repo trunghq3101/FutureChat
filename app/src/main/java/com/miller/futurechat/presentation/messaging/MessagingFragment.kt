@@ -1,5 +1,6 @@
 package com.miller.futurechat.presentation.messaging
 
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.miller.futurechat.BR
 import com.miller.futurechat.R
@@ -15,11 +16,23 @@ class MessagingFragment : BaseFragment<FragmentMessagingBinding, MessagingViewMo
     override val bindingVar: Int = BR.viewModel
 
     private val args: MessagingFragmentArgs by navArgs()
+    private val adapter = MessagingAdapter()
 
     override fun initView() {
         super.initView()
-        viewModel.conversationId = args.conversationId
-        viewModel.loadMsg()
+        viewModel.loadMsg(args.conversationId)
         setupToolbar(toolbarMessaging, false)
+    }
+
+    override fun observeField() {
+        super.observeField()
+        with (viewModel) {
+            pagedList.observe(viewLifecycleOwner, Observer {
+                adapter.submitList(it)
+            })
+            networkState.observe(viewLifecycleOwner, Observer {
+                adapter.networkState = it
+            })
+        }
     }
 }

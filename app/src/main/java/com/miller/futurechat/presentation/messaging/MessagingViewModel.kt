@@ -1,17 +1,23 @@
 package com.miller.futurechat.presentation.messaging
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.miller.futurechat.presentation.base.BaseViewModel
-import com.miller.futurechat.utils.EditTextBindingUtils
-import com.miller.futurechat.utils.SchedulersUtils
+import androidx.lifecycle.Transformations
+import androidx.paging.PagedList
 import com.miller.core.usecases.UseCases
+import com.miller.futurechat.framework.model.MessageEntity
+import com.miller.futurechat.framework.widget.MessagePagingDataLoader
+import com.miller.futurechat.presentation.base.BaseViewModel
 import com.miller.futurechat.presentation.model.MessageItem
-import com.miller.futurechat.presentation.model.mapToPresentation
+import com.miller.futurechat.utils.EditTextBindingUtils
+import com.miller.futurechat.utils.SingleLiveEvent
+import com.miller.paging.PagingDataLoader
+import com.miller.paging.fetchPage
 import org.koin.core.inject
 
-class MessagingViewModel : BaseViewModel() {
+class MessagingViewModel(
+    private val pagingDataLoader: MessagePagingDataLoader
+) : BaseViewModel() {
 
     override val useCases: UseCases by inject()
 
@@ -25,15 +31,23 @@ class MessagingViewModel : BaseViewModel() {
         }
     }
 
-    var conversationId: String? = null
-
     /*
     Observables
      */
     private val _isSendBtnVisible = MutableLiveData<Boolean>().apply { value = false }
     val isSendBtnVisible: LiveData<Boolean> = _isSendBtnVisible
-    private val _messages = MutableLiveData<List<MessageItem>>()
-    val messages: LiveData<List<MessageItem>> = _messages
+
+    private val conversationId = SingleLiveEvent<String>()
+
+    private val pagingWrapper = Transformations.map(conversationId) {
+        pagingDataLoader.fetchPage(it)
+    }
+    val pagedList: LiveData<PagedList<MessageEntity>> = Transformations.switchMap(pagingWrapper) {
+        it.livePagedList
+    }
+    val networkState = Transformations.switchMap(pagingWrapper) {
+        it.liveNetworkState
+    }
 
     val textMsg = MutableLiveData<String>()
     /*
@@ -44,22 +58,8 @@ class MessagingViewModel : BaseViewModel() {
         _isSendBtnVisible.value = isVisible
     }
 
-    fun loadMsg() {
-        conversationId?.let { id ->
-            useCases.getMessages(id)
-                .compose(SchedulersUtils.applyAsyncSchedulersSingle())
-                .map { list ->
-                    list.map { it.mapToPresentation() }
-                }
-                .subscribe(
-                    {
-                        Log.d("------>"," : $it")
-                    },
-                    {
-                        onLoadFail(it)
-                    }
-                )
-        }
+    fun loadMsg(conversationId: String) {
+        this.conversationId.value = conversationId
     }
 
     fun sendMsg() {

@@ -15,6 +15,7 @@ fun Conversation.mapToPresentation(): ConversationItem {
 fun Message.mapToPresentation(): MessageItem {
     return MessageItem(
         id = this.id,
-        contentText = this.contentText
+        contentText = this.contentText,
+        ownerType =
     )
 }
