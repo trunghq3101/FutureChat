@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.miller.futurechat.framework.model.MessageEntity
+import com.miller.futurechat.presentation.model.MessageItem
 import io.reactivex.Single
 
 /**
@@ -16,11 +17,11 @@ import io.reactivex.Single
 interface AppDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMessages(messages: List<MessageEntity>): Single<List<Long>>
+    fun insertMessages(messages: List<MessageItem>): Single<List<Long>>
 
     @Query("DELETE FROM messages")
     fun clearMessages(): Single<Void>
 
     @Query("SELECT * FROM messages")
-    fun getMessages(): DataSource.Factory<Int, MessageEntity>
+    fun getMessages(): DataSource.Factory<Int, MessageItem>
 }

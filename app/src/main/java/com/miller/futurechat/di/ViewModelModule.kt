@@ -1,5 +1,6 @@
 package com.miller.futurechat.di
 
+import com.miller.futurechat.framework.widget.MessagePagingDataLoader
 import com.miller.futurechat.presentation.conversations.ConversationsViewModel
 import com.miller.futurechat.presentation.login.LoginViewModel
 import com.miller.futurechat.presentation.messaging.MessagingViewModel
@@ -11,7 +12,9 @@ import org.koin.dsl.module
  */
 
 val viewModelModule = module {
+    factory { MessagePagingDataLoader(get(), get()) }
+
     viewModel { LoginViewModel() }
     viewModel { ConversationsViewModel() }
-    viewModel { MessagingViewModel() }
+    viewModel { MessagingViewModel(get()) }
 }

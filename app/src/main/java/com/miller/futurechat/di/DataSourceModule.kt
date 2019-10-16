@@ -10,6 +10,7 @@ import com.miller.futurechat.framework.datasourceimpl.FirestoreConversationDataS
 import com.miller.futurechat.framework.datasourceimpl.FirestoreMessageDataSource
 import com.miller.futurechat.framework.datasourceimpl.FirestoreNotificationTokenDataSource
 import com.miller.futurechat.framework.datasourceimpl.PrefAuthenticationDataSource
+import com.miller.futurechat.framework.db.AppDatabase
 import com.miller.futurechat.framework.sharedPref.PrefHelper
 import com.miller.futurechat.framework.sharedPref.SharedPrefApi
 import org.koin.core.qualifier.named
@@ -27,6 +28,7 @@ val dataSourceModule = module {
     single { FirebaseFirestore.getInstance() }
     single { SharedPrefApi(get()) }
     single { PrefHelper(get()) }
+    single { AppDatabase.create(get()).Dao() }
 
     single<ConversationDataSource> { FirestoreConversationDataSource(get()) }
     single<NotificationTokenDataSource> { FirestoreNotificationTokenDataSource(get()) }

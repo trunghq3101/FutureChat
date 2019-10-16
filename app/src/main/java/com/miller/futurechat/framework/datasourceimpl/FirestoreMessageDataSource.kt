@@ -17,12 +17,12 @@ class FirestoreMessageDataSource(
 
     override fun readPagingMessages(
         conversationId: String,
-        lastItem: Message?
+        lastMsgId: String?
     ): Single<List<Message>> {
-        return lastItem?.let {
+        return lastMsgId?.let {
             Single.create<List<Message>> { emitter ->
                 firestore.collection(CONVERSATIONS).document(conversationId).collection(MESSAGES)
-                    .document(it.id)
+                    .document(it)
                     .get()
                     .addOnSuccessListener { docSnap ->
                         firestore.collection(CONVERSATIONS).document(conversationId)
