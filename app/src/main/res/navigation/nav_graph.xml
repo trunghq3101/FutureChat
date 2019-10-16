@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/messagingFragment"
         android:name="com.miller.futurechat.presentation.messaging.MessagingFragment"
-        android:label="fragment_messaging"
+        android:label="Messaging"
         tools:layout="@layout/fragment_messaging" >
         <argument
             android:name="conversationId"

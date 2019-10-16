@@ -9,10 +9,11 @@ import com.miller.futurechat.utils.SchedulersUtils
 import com.miller.core.usecases.UseCases
 import com.miller.futurechat.presentation.model.MessageItem
 import com.miller.futurechat.presentation.model.mapToPresentation
+import org.koin.core.inject
 
-class MessagingViewModel(
-    private val useCases: UseCases
-) : BaseViewModel() {
+class MessagingViewModel : BaseViewModel() {
+
+    override val useCases: UseCases by inject()
 
     val onInputTextExistListener = object : EditTextBindingUtils.OnTextExistListener {
         override fun onTextEmpty() {

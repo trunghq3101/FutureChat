@@ -5,6 +5,8 @@ import com.miller.futurechat.BR
 import com.miller.futurechat.R
 import com.miller.futurechat.databinding.FragmentMessagingBinding
 import com.miller.futurechat.presentation.base.BaseFragment
+import com.miller.futurechat.utils.setupToolbar
+import kotlinx.android.synthetic.main.fragment_messaging.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MessagingFragment : BaseFragment<FragmentMessagingBinding, MessagingViewModel>() {
@@ -18,5 +20,6 @@ class MessagingFragment : BaseFragment<FragmentMessagingBinding, MessagingViewMo
         super.initView()
         viewModel.conversationId = args.conversationId
         viewModel.loadMsg()
+        setupToolbar(toolbarMessaging, false)
     }
 }
