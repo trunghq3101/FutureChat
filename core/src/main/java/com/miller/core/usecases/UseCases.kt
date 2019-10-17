@@ -6,5 +6,6 @@ data class UseCases(
     val saveAuthToken: SaveAuthToken,
     val addNotificationToken: AddNotificationToken,
     val getMessages: GetMessages,
-    val getPagingMessages: GetPagingMessages
+    val getPagingMessages: GetPagingMessages,
+    val getPagingConversations: GetPagingConversations
 )

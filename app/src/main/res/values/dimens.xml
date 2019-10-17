@@ -15,7 +15,7 @@
     <dimen name="messaging_input_top_bound">58dp</dimen>
     <dimen name="messaging_add_size">50dp</dimen>
     <dimen name="toolbar_elevation">2dp</dimen>
-    <dimen name="messaging_item_radius_full">30dp</dimen>
+    <dimen name="messaging_item_radius_full">20dp</dimen>
     <dimen name="messaging_item_radius_small">5dp</dimen>
     <dimen name="messaging_item_padding">15dp</dimen>
     <dimen name="messaging_item_max_width">300sp</dimen>

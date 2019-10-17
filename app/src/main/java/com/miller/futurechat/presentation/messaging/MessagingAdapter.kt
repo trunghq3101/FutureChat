@@ -5,19 +5,21 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.AdapterListUpdateCallback
 import androidx.recyclerview.widget.DiffUtil
+import com.miller.core.domain.model.Message
 import com.miller.futurechat.R
 import com.miller.futurechat.databinding.ItemMessageMeBinding
 import com.miller.futurechat.databinding.ItemMessageOtherBinding
 import com.miller.futurechat.databinding.PagingItemStateBinding
-import com.miller.futurechat.presentation.model.MessageItem
-import com.miller.futurechat.presentation.model.type.OwnerType
+import com.miller.futurechat.presentation.model.mapToPresentation
 import com.miller.paging.PagingAdapter
 
 /**
  * Created by Miller on 16/10/2019
  */
 
-class MessagingAdapter : PagingAdapter<MessageItem>(messagingDiffUtil) {
+class MessagingAdapter(
+    private val userId: String
+) : PagingAdapter<Message>(messagingDiffUtil) {
     override val adapterCallback: AdapterListUpdateCallback = AdapterListUpdateCallback(this)
 
     override fun createNetworkStateViewHolder(parent: ViewGroup): NetworkStateItemViewHolder {
@@ -34,7 +36,7 @@ class MessagingAdapter : PagingAdapter<MessageItem>(messagingDiffUtil) {
     override fun createDataItemViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ItemViewHolder<MessageItem> {
+    ): ItemViewHolder<Message> {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             TYPE_ME -> DataBindingUtil.inflate<ItemMessageMeBinding>(
@@ -59,26 +61,33 @@ class MessagingAdapter : PagingAdapter<MessageItem>(messagingDiffUtil) {
     }
 
     override fun getDataItemViewType(position: Int): Int {
-        return when (getItem(position)?.ownerType) {
-            OwnerType.Me -> TYPE_ME
-            OwnerType.Other -> TYPE_OTHER
-            null -> TYPE_ME
+        return when (getItem(position)?.senderId == userId) {
+            true -> TYPE_ME
+            else -> TYPE_OTHER
         }
     }
 
-    class MessageMeVH(
+    inner class MessageMeVH(
         private val binding: ItemMessageMeBinding
-    ) : ItemViewHolder<MessageItem>(binding.root) {
-        override fun bind(item: MessageItem?) {
-            binding.item = item
+    ) : ItemViewHolder<Message>(binding.root) {
+        override fun bind(item: Message?, position: Int) {
+            binding.item = item?.mapToPresentation(
+                userId,
+                getItem(position - 1),
+                getItem(position + 1)
+            )
         }
     }
 
-    class MessageOtherVH(
+    inner class MessageOtherVH(
         private val binding: ItemMessageOtherBinding
-    ) : ItemViewHolder<MessageItem>(binding.root) {
-        override fun bind(item: MessageItem?) {
-            binding.item = item
+    ) : ItemViewHolder<Message>(binding.root) {
+        override fun bind(item: Message?, position: Int) {
+            binding.item = item?.mapToPresentation(
+                userId,
+                getItem(position - 1),
+                getItem(position + 1)
+            )
         }
     }
 
@@ -99,12 +108,15 @@ class MessagingAdapter : PagingAdapter<MessageItem>(messagingDiffUtil) {
         const val TYPE_ME = 1
         const val TYPE_OTHER = 2
 
-        val messagingDiffUtil = object : DiffUtil.ItemCallback<MessageItem>() {
-            override fun areItemsTheSame(oldItem: MessageItem, newItem: MessageItem): Boolean {
+        val messagingDiffUtil = object : DiffUtil.ItemCallback<Message>() {
+            override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: MessageItem, newItem: MessageItem): Boolean {
+            override fun areContentsTheSame(
+                oldItem: Message,
+                newItem: Message
+            ): Boolean {
                 return oldItem == newItem
             }
 

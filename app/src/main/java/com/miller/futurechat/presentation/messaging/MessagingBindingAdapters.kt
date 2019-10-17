@@ -1,6 +1,5 @@
 package com.miller.futurechat.presentation.messaging
 
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.miller.futurechat.R
@@ -19,19 +18,19 @@ fun TextView.setMessageBackground(relativePosition: RelativePositionType?, owner
     ownerType ?: return
     background = when (relativePosition) {
         is Top -> resources.getDrawable(
-            if (ownerType is Me) R.drawable.messaging_bg_message_me_top else R.drawable.messaging_bg_message_me_top,
+            if (ownerType is Me) R.drawable.messaging_bg_message_me_top else R.drawable.messaging_bg_message_other_top,
             null
         )
         is Mid -> resources.getDrawable(
-            if (ownerType is Me) R.drawable.messaging_bg_message_me_mid else R.drawable.messaging_bg_message_me_mid,
+            if (ownerType is Me) R.drawable.messaging_bg_message_me_mid else R.drawable.messaging_bg_message_other_mid,
             null
         )
         is Bot -> resources.getDrawable(
-            if (ownerType is Me) R.drawable.messaging_bg_message_me_bot else R.drawable.messaging_bg_message_me_bot,
+            if (ownerType is Me) R.drawable.messaging_bg_message_me_bot else R.drawable.messaging_bg_message_other_bot,
             null
         )
         is Single -> resources.getDrawable(
-            if (ownerType is Me) R.drawable.messaging_bg_message_me_single else R.drawable.messaging_bg_message_me_single,
+            if (ownerType is Me) R.drawable.messaging_bg_message_me_single else R.drawable.messaging_bg_message_other_single,
             null
         )
     }

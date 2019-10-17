@@ -6,6 +6,7 @@ import androidx.paging.AsyncPagedListDiffer
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.*
+import java.lang.Exception
 
 /**
  * Created by Miller on 16/10/2019
@@ -70,7 +71,7 @@ abstract class PagingAdapter<Item>(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ItemViewHolder<*>) {
-            (holder as ItemViewHolder<Item>).bind(getItem(position))
+            (holder as ItemViewHolder<Item>).bind(getItem(position), position)
         } else if (holder is NetworkStateItemViewHolder) {
             holder.bind(networkState)
         }
@@ -89,7 +90,11 @@ abstract class PagingAdapter<Item>(
     }
 
     override fun getItem(position: Int): Item? {
-        return differ.getItem(position)
+        return try {
+            differ.getItem(position)
+        } catch (e: Exception) {
+            null
+        }
     }
 
     override fun submitList(pagedList: PagedList<Item>?) {
@@ -107,7 +112,7 @@ abstract class PagingAdapter<Item>(
     abstract class ItemViewHolder<Item>(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
-        abstract fun bind(item: Item?)
+        abstract fun bind(item: Item?, position: Int)
     }
 
     abstract class NetworkStateItemViewHolder(

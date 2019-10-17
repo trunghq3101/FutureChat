@@ -12,9 +12,13 @@ fun ConversationEntity.mapToDomain(): Conversation {
 }
 
 fun MessageEntity.mapToDomain(): Message {
-    return Message(id, contentText, senderId)
+    return Message(id, contentText, senderId, conversationId)
 }
 
 fun Message.mapToFramework(): MessageEntity {
-    return MessageEntity(id, contentText, senderId)
+    return MessageEntity(id, contentText, senderId, conversationId)
+}
+
+fun Conversation.mapToFramework(): ConversationEntity {
+    return ConversationEntity(id, avatarUrl, followers, title, lastMessage)
 }

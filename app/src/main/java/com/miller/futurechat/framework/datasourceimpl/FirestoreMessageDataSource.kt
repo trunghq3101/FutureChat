@@ -8,6 +8,7 @@ import com.miller.futurechat.framework.firestore.CollectionsConstant.MESSAGES
 import com.miller.futurechat.framework.model.MessageEntity
 import com.miller.futurechat.framework.model.mapToDomain
 import com.miller.futurechat.utils.toItemList
+import com.miller.paging.PagingBoundaryCallback.Companion.PAGE_SIZE
 import com.miller.utils.toSingle
 import io.reactivex.Single
 
@@ -21,12 +22,17 @@ class FirestoreMessageDataSource(
     ): Single<List<Message>> {
         return lastMsgId?.let {
             Single.create<List<Message>> { emitter ->
-                firestore.collection(CONVERSATIONS).document(conversationId).collection(MESSAGES)
+                firestore.collection(CONVERSATIONS)
+                    .document(conversationId)
+                    .collection(MESSAGES)
                     .document(it)
                     .get()
                     .addOnSuccessListener { docSnap ->
-                        firestore.collection(CONVERSATIONS).document(conversationId)
-                            .collection(MESSAGES).startAfter(docSnap)
+                        firestore.collection(CONVERSATIONS)
+                            .document(conversationId)
+                            .collection(MESSAGES)
+                            .startAfter(docSnap)
+                            .limit(PAGE_SIZE.toLong())
                             .get()
                             .addOnSuccessListener { querySnap ->
                                 querySnap.toItemList(MessageEntity::class.java).map {
@@ -41,7 +47,11 @@ class FirestoreMessageDataSource(
                     }
             }
         } ?: run {
-            firestore.collection(CONVERSATIONS).document(conversationId).collection(MESSAGES).get()
+            firestore.collection(CONVERSATIONS)
+                .document(conversationId)
+                .collection(MESSAGES)
+                .limit(PAGE_SIZE.toLong())
+                .get()
                 .toSingle()
                 .map { querySnap ->
                     querySnap.toItemList(MessageEntity::class.java).map {

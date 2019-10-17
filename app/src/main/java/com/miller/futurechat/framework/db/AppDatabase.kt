@@ -5,13 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.miller.futurechat.framework.model.ConversationEntity
+import com.miller.futurechat.framework.model.MessageEntity
 import com.miller.futurechat.presentation.model.MessageItem
 
 /**
  * Created by Miller on 16/10/2019
  */
 
-@Database(entities = [MessageItem::class], exportSchema = false, version = 1)
+@Database(entities = [MessageEntity::class, ConversationEntity::class], exportSchema = false, version = 1)
 @TypeConverters(AppTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
