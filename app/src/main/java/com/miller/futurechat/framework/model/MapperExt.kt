@@ -1,5 +1,6 @@
 package com.miller.futurechat.framework.model
 
+import com.google.firebase.Timestamp
 import com.miller.core.domain.model.Conversation
 import com.miller.core.domain.model.Message
 
@@ -12,11 +13,11 @@ fun ConversationEntity.mapToDomain(): Conversation {
 }
 
 fun MessageEntity.mapToDomain(): Message {
-    return Message(id, contentText, senderId, conversationId)
+    return Message(id, contentText, senderId, conversationId, timestamp.toDate())
 }
 
 fun Message.mapToFramework(): MessageEntity {
-    return MessageEntity(id, contentText, senderId, conversationId)
+    return MessageEntity(id, contentText, senderId, conversationId, Timestamp(timestamp))
 }
 
 fun Conversation.mapToFramework(): ConversationEntity {

@@ -10,6 +10,7 @@ import com.miller.paging.LivePagingWrapper
 import com.miller.paging.PagingDataLoader
 import com.miller.paging.fetchPage
 import io.reactivex.Single
+import java.lang.Exception
 
 /**
  * Created by Miller on 16/10/2019
@@ -27,12 +28,23 @@ class MessagePagingDataLoader(
         return appDao.getMessages().map { it.mapToDomain() }
     }
 
-    override fun fetchPageFromRemote(lastItem: Message?): Single<List<Message>> {
-        return useCases.getPagingMessages(conversationId, lastItem?.id)
+    override fun fetchBefore(firstItem: Message): Single<List<Message>> {
+        return useCases.getPagingMessagesBefore(conversationId, firstItem.id)
+    }
+
+    override fun fetchAfter(lastItem: Message?): Single<List<Message>> {
+        return useCases.getPagingMessagesAfter(conversationId, lastItem?.id)
     }
 
     override fun savePageToLocal(items: List<Message>): Single<List<Long>> {
-        return appDao.insertMessages(items.map { it.mapToFramework() })
+        return Single.create { emitter ->
+            try {
+                val result = appDao.upsertMessagesSync(items.map { it.mapToFramework() })
+                emitter.onSuccess(listOf())
+            } catch (e: Exception) {
+                emitter.onError(e)
+            }
+        }
     }
 
     override fun clearPageInLocal(): Single<Void> {

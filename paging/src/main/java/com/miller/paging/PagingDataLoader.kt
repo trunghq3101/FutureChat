@@ -11,7 +11,9 @@ interface PagingDataLoader<Item> {
 
     fun fetchPageFromLocal(): DataSource.Factory<Int, Item>
 
-    fun fetchPageFromRemote(lastItem: Item?): Single<List<Item>>
+    fun fetchBefore(firstItem: Item): Single<List<Item>>
+
+    fun fetchAfter(lastItem: Item?): Single<List<Item>>
 
     fun savePageToLocal(items: List<Item>): Single<List<Long>>
 

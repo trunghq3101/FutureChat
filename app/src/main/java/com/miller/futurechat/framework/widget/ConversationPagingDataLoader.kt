@@ -21,7 +21,13 @@ class ConversationPagingDataLoader(
         return appDao.getConversations().map { it.mapToDomain() }
     }
 
-    override fun fetchPageFromRemote(lastItem: Conversation?): Single<List<Conversation>> {
+    override fun fetchBefore(firstItem: Conversation): Single<List<Conversation>> {
+        return Single.create { emitter ->
+            emitter.onSuccess(listOf())
+        }
+    }
+
+    override fun fetchAfter(lastItem: Conversation?): Single<List<Conversation>> {
         return useCases.getPagingConversations(lastItem?.id)
     }
 

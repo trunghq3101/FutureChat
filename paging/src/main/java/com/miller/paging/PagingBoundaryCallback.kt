@@ -1,8 +1,7 @@
 package com.miller.paging
 
 import androidx.paging.PagedList
-import com.miller.paging.PagingRequestHelper.RequestType.AFTER
-import com.miller.paging.PagingRequestHelper.RequestType.INITIAL
+import com.miller.paging.PagingRequestHelper.RequestType.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +13,7 @@ import java.util.concurrent.Executor
 
 class PagingBoundaryCallback<Item>(
     private val executor: Executor,
-    private val pagingRepository: PagingDataLoader<Item>
+    private val pagingDataLoader: PagingDataLoader<Item>
 ): PagedList.BoundaryCallback<Item>() {
 
     private val helper = PagingRequestHelper(executor)
@@ -24,7 +23,7 @@ class PagingBoundaryCallback<Item>(
     override fun onZeroItemsLoaded() {
         helper.runIfNotRunning(INITIAL, object : PagingRequestHelper.Request {
             override fun run(callback: PagingRequestHelper.Request.Callback) {
-                pagingRepository.fetchPageFromRemote(null)
+                pagingDataLoader.fetchAfter(null)
                     .subscribeOn(Schedulers.from(executor))
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
@@ -42,10 +41,32 @@ class PagingBoundaryCallback<Item>(
         })
     }
 
+    override fun onItemAtFrontLoaded(itemAtFront: Item) {
+        helper.runIfNotRunning(BEFORE, object : PagingRequestHelper.Request {
+            override fun run(callback: PagingRequestHelper.Request.Callback) {
+                pagingDataLoader.fetchBefore(itemAtFront)
+                    .subscribeOn(Schedulers.from(executor))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        {
+                            insertItemsIntoDb(it, callback)
+                        },
+                        {
+                            callback.recordFailure(it)
+                        }
+                    )
+                    .apply {
+                        compositeDisposable.add(this)
+                    }
+            }
+
+        })
+    }
+
     override fun onItemAtEndLoaded(itemAtEnd: Item) {
         helper.runIfNotRunning(AFTER, object : PagingRequestHelper.Request {
             override fun run(callback: PagingRequestHelper.Request.Callback) {
-                pagingRepository.fetchPageFromRemote(itemAtEnd)
+                pagingDataLoader.fetchAfter(itemAtEnd)
                     .subscribeOn(Schedulers.from(executor))
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
@@ -67,7 +88,7 @@ class PagingBoundaryCallback<Item>(
         items: List<Item>,
         callback: PagingRequestHelper.Request.Callback
     ) {
-        pagingRepository.savePageToLocal(items)
+        pagingDataLoader.savePageToLocal(items)
             .subscribeOn(Schedulers.from(executor))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -85,6 +106,6 @@ class PagingBoundaryCallback<Item>(
 
     companion object{
         // This number is fixed in specification
-        const val PAGE_SIZE = 12
+        const val PAGE_SIZE = 1
     }
 }
