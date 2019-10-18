@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.miller.futurechat.presentation.model.MessageItem" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/messaging_item_spacing"
+        android:layout_marginBottom="@dimen/messaging_item_spacing"
+        android:gravity="start"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="@dimen/messaging_item_max_width"
+            android:padding="@dimen/messaging_item_padding"
+            android:text="@{ item.contentText }"
+            app:ownerType="@{ item.ownerType }"
+            app:relativePosition="@{ item.relativePosition }"
+            tools:text="This is a message This is a message This is a message" />
+    </LinearLayout>
+</layout>

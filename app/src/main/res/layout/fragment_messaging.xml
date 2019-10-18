@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -13,6 +14,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_white">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarMessaging"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/color_white"
+            android:elevation="@dimen/toolbar_elevation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerMessages"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/messaging_item_margin"
+            android:layout_marginEnd="@dimen/messaging_item_margin"
+            app:layout_constraintBottom_toTopOf="@id/inputMessaging"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarMessaging"
+            tools:listitem="@layout/item_message_me" />
 
         <EditText
             android:id="@+id/inputMessaging"

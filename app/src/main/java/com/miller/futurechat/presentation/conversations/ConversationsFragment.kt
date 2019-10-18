@@ -1,9 +1,11 @@
 package com.miller.futurechat.presentation.conversations
 
+import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.miller.core.usecases.model.AuthState
 import com.miller.futurechat.BR
 import com.miller.futurechat.R
 import com.miller.futurechat.databinding.FragmentConversationsBinding
@@ -21,6 +23,11 @@ class ConversationsFragment : BaseFragment<FragmentConversationsBinding, Convers
         GestureDetector(context, ConversationGestureListener(recyclerConversations, viewModel))
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.loadAuthState()
+    }
+
     override fun initView() {
         super.initView()
         recyclerConversations.adapter = conversationAdapter
@@ -34,18 +41,26 @@ class ConversationsFragment : BaseFragment<FragmentConversationsBinding, Convers
 
             override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
             }
-
         })
-
-        viewModel.loadConversations()
     }
 
     override fun observeField() {
         super.observeField()
         with(viewModel) {
-            conversations.observe(viewLifecycleOwner, Observer {
+            authState.observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    is AuthState.LoggedIn -> viewModel.loadConversations()
+                    is AuthState.LoggedOut -> showLoggedOutError()
+                }
+            })
+            pagedList.observe(viewLifecycleOwner, Observer {
                 conversationAdapter.submitList(it)
+            })
+            networkState.observe(viewLifecycleOwner, Observer {
+                conversationAdapter.networkState = it
             })
         }
     }
+
+    private fun showLoggedOutError() {}
 }

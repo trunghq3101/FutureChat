@@ -1,19 +1,19 @@
 package com.miller.futurechat.presentation.login
 
-import android.util.Log
+import com.miller.core.usecases.UseCases
+import com.miller.core.usecases.model.AuthState
 import com.miller.futurechat.presentation.base.BaseViewModel
 import com.miller.futurechat.utils.SchedulersUtils.applyAsyncSchedulersSingle
 import com.miller.futurechat.utils.SingleLiveEvent
-import com.miller.core.usecases.UseCases
-import com.miller.core.usecases.model.AuthState
+import org.koin.core.inject
 
 /**
  * Created by Miller on 25/09/2019
  */
 
-class LoginViewModel(
-    private val useCases: UseCases
-) : BaseViewModel() {
+class LoginViewModel : BaseViewModel() {
+
+    override val useCases: UseCases by inject()
 
     var authToken: String? = null
 

@@ -11,4 +11,7 @@ object CollectionsConstant {
     object ConversationsConstant {
         const val FOLLOWERS = "followers"
     }
+    object MessagesConstant {
+        const val TIMESTAMP = "timestamp"
+    }
 }

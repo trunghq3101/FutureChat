@@ -1,18 +1,20 @@
 package com.miller.futurechat.presentation.messaging
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.miller.futurechat.presentation.base.BaseViewModel
+import com.miller.core.domain.model.Message
+import com.miller.core.usecases.UseCases
+import com.miller.core.usecases.model.AuthState
+import com.miller.futurechat.framework.widget.MessagePagingDataLoader
+import com.miller.futurechat.presentation.base.PagingViewModel
 import com.miller.futurechat.utils.EditTextBindingUtils
 import com.miller.futurechat.utils.SchedulersUtils
-import com.miller.core.usecases.UseCases
-import com.miller.futurechat.presentation.model.MessageItem
-import com.miller.futurechat.presentation.model.mapToPresentation
+import org.koin.core.inject
 
-class MessagingViewModel(
-    private val useCases: UseCases
-) : BaseViewModel() {
+class MessagingViewModel: PagingViewModel<Message>() {
+
+    override val pagingDataLoader: MessagePagingDataLoader by inject()
+    override val useCases: UseCases by inject()
 
     val onInputTextExistListener = object : EditTextBindingUtils.OnTextExistListener {
         override fun onTextEmpty() {
@@ -24,15 +26,16 @@ class MessagingViewModel(
         }
     }
 
-    var conversationId: String? = null
+    private var conversationId: String? = null
 
     /*
     Observables
      */
     private val _isSendBtnVisible = MutableLiveData<Boolean>().apply { value = false }
     val isSendBtnVisible: LiveData<Boolean> = _isSendBtnVisible
-    private val _messages = MutableLiveData<List<MessageItem>>()
-    val messages: LiveData<List<MessageItem>> = _messages
+
+    private val _authState = MutableLiveData<AuthState>()
+    val authState: LiveData<AuthState> = _authState
 
     val textMsg = MutableLiveData<String>()
     /*
@@ -43,21 +46,26 @@ class MessagingViewModel(
         _isSendBtnVisible.value = isVisible
     }
 
-    fun loadMsg() {
-        conversationId?.let { id ->
-            useCases.getMessages(id)
-                .compose(SchedulersUtils.applyAsyncSchedulersSingle())
-                .map { list ->
-                    list.map { it.mapToPresentation() }
+    fun loadAuthState() {
+        useCases.getAuthState()
+            .compose(SchedulersUtils.applyAsyncSchedulersSingle())
+            .subscribe(
+                {
+                    _authState.value = it
+                },
+                {
+                    onLoadFail(it)
+                    _authState.value = AuthState.LoggedOut
                 }
-                .subscribe(
-                    {
-                        Log.d("------>"," : $it")
-                    },
-                    {
-                        onLoadFail(it)
-                    }
-                )
+            ).apply {
+                addDisposable(this)
+            }
+    }
+
+    fun loadMsg(conversationId: String) {
+        this.conversationId = conversationId
+        (authState.value as? AuthState.LoggedIn)?.token?.let { userId ->
+            pagingWrapper.value = pagingDataLoader.fetchPage(userId, conversationId)
         }
     }
 
