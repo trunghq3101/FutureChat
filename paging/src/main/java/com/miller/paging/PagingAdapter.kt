@@ -2,6 +2,7 @@ package com.miller.paging
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.CallSuper
 import androidx.paging.AsyncPagedListDiffer
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
@@ -13,10 +14,16 @@ import java.lang.Exception
  */
 
 abstract class PagingAdapter<Item>(
-    diffCallback: DiffUtil.ItemCallback<Item>
+    private val diffCallback: DiffUtil.ItemCallback<Item>
 ) : PagedListAdapter<Item, RecyclerView.ViewHolder>(diffCallback) {
 
     abstract val adapterCallback: AdapterListUpdateCallback
+
+    abstract val listUpdateCallback: ListUpdateCallback
+
+    private val differ: AsyncPagedListDiffer<Item> by lazy {
+        createDiffer()
+    }
 
     var networkState: PagingNetworkState? = null
         set(value) {
@@ -34,27 +41,6 @@ abstract class PagingAdapter<Item>(
                 notifyItemChanged(itemCount - 1)
             }
         }
-
-    private val listUpdateCallback = object : ListUpdateCallback {
-        override fun onChanged(position: Int, count: Int, payload: Any?) {
-            adapterCallback.onChanged(position + 1, count, payload)
-        }
-
-        override fun onMoved(fromPosition: Int, toPosition: Int) {
-            adapterCallback.onMoved(fromPosition + 1, toPosition + 1)
-        }
-
-        override fun onInserted(position: Int, count: Int) {
-            adapterCallback.onInserted(position + 1, count)
-        }
-
-        override fun onRemoved(position: Int, count: Int) {
-            adapterCallback.onRemoved(position + 1, count)
-        }
-    }
-
-    private val differ = AsyncPagedListDiffer<Item>(listUpdateCallback,
-        AsyncDifferConfig.Builder<Item>(diffCallback).build())
 
     abstract fun createNetworkStateViewHolder(parent: ViewGroup): NetworkStateItemViewHolder
 
@@ -105,6 +91,11 @@ abstract class PagingAdapter<Item>(
         return differ.currentList
     }
 
+    private fun createDiffer(): AsyncPagedListDiffer<Item> {
+        return AsyncPagedListDiffer<Item>(listUpdateCallback,
+            AsyncDifferConfig.Builder<Item>(diffCallback).build())
+    }
+
     private fun hasExtraRow(): Boolean {
         return networkState != null && this.networkState !== PagingNetworkState.LOADED
     }
@@ -136,6 +127,31 @@ abstract class PagingAdapter<Item>(
             bindError(showError, networkState?.msg)
         }
 
+    }
+
+    open class WithNetworkStateListUpdateCallback(
+        private val adapterCallback: AdapterListUpdateCallback
+    ) : ListUpdateCallback {
+
+        @CallSuper
+        override fun onChanged(position: Int, count: Int, payload: Any?) {
+            adapterCallback.onChanged(position + 1, count, payload)
+        }
+
+        @CallSuper
+        override fun onMoved(fromPosition: Int, toPosition: Int) {
+            adapterCallback.onMoved(fromPosition + 1, toPosition + 1)
+        }
+
+        @CallSuper
+        override fun onInserted(position: Int, count: Int) {
+            adapterCallback.onInserted(position + 1, count)
+        }
+
+        @CallSuper
+        override fun onRemoved(position: Int, count: Int) {
+            adapterCallback.onRemoved(position + 1, count)
+        }
     }
 
     companion object {

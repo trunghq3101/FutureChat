@@ -20,7 +20,7 @@ fun Message.mapToPresentation(
     msgAfter: Message?
 ): MessageItem {
     val position = if (msgBefore?.senderId == msgAfter?.senderId) {
-        if (null == msgBefore) Single else Mid
+        if (senderId != msgBefore?.senderId) Single else Mid
     } else {
         when (senderId) {
             msgBefore?.senderId -> Bot

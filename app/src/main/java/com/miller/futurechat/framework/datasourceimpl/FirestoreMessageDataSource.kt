@@ -1,6 +1,7 @@
 package com.miller.futurechat.framework.datasourceimpl
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.miller.core.data.datasource.MessageDataSource
 import com.miller.core.domain.model.Message
 import com.miller.futurechat.framework.firestore.CollectionsConstant.CONVERSATIONS
@@ -31,7 +32,7 @@ class FirestoreMessageDataSource(
                     firestore.collection(CONVERSATIONS)
                         .document(convId)
                         .collection(MESSAGES)
-                        .orderBy(TIMESTAMP)
+                        .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
                         .endBefore(docSnap)
                         .get()
                         .addOnSuccessListener { querySnap ->
@@ -63,7 +64,7 @@ class FirestoreMessageDataSource(
                         firestore.collection(CONVERSATIONS)
                             .document(conversationId)
                             .collection(MESSAGES)
-                            .orderBy(TIMESTAMP)
+                            .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
                             .limit(PAGE_SIZE.toLong())
                             .startAfter(docSnap)
                             .get()
@@ -83,7 +84,7 @@ class FirestoreMessageDataSource(
             firestore.collection(CONVERSATIONS)
                 .document(conversationId)
                 .collection(MESSAGES)
-                .orderBy(TIMESTAMP)
+                .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
                 .limit(PAGE_SIZE.toLong())
                 .get()
                 .toSingle()

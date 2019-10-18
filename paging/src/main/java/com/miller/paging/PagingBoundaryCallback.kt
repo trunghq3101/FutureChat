@@ -106,6 +106,6 @@ class PagingBoundaryCallback<Item>(
 
     companion object{
         // This number is fixed in specification
-        const val PAGE_SIZE = 1
+        const val PAGE_SIZE = 10
     }
 }

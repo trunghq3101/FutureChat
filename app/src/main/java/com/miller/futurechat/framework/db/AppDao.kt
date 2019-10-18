@@ -34,7 +34,7 @@ interface AppDao {
     @Query("DELETE FROM messages")
     fun clearMessages(): Single<Void>
 
-    @Query("SELECT * FROM messages")
+    @Query("SELECT * FROM messages ORDER BY timestamp DESC")
     fun getMessages(): DataSource.Factory<Int, MessageEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

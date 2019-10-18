@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.AdapterListUpdateCallback
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListUpdateCallback
 import com.miller.core.domain.model.Message
 import com.miller.futurechat.R
 import com.miller.futurechat.databinding.ItemMessageMeBinding
@@ -20,7 +21,18 @@ import com.miller.paging.PagingAdapter
 class MessagingAdapter(
     private val userId: String
 ) : PagingAdapter<Message>(messagingDiffUtil) {
+
     override val adapterCallback: AdapterListUpdateCallback = AdapterListUpdateCallback(this)
+    override val listUpdateCallback: ListUpdateCallback = object : WithNetworkStateListUpdateCallback(adapterCallback) {
+        override fun onInserted(position: Int, count: Int) {
+            super.onInserted(position, count)
+            updateRelativePositions(position)
+        }
+
+        private fun updateRelativePositions(position: Int) {
+            if (position > 0) notifyItemRangeChanged(position - 1, position)
+        }
+    }
 
     override fun createNetworkStateViewHolder(parent: ViewGroup): NetworkStateItemViewHolder {
         return DataBindingUtil.inflate<PagingItemStateBinding>(

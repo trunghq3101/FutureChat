@@ -3,6 +3,7 @@ package com.miller.futurechat.presentation.messaging
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.miller.core.usecases.model.AuthState
 import com.miller.futurechat.BR
 import com.miller.futurechat.R
@@ -57,6 +58,10 @@ class MessagingFragment : BaseFragment<FragmentMessagingBinding, MessagingViewMo
         (viewModel.authState.value as? AuthState.LoggedIn)?.token?.let {
             adapter = MessagingAdapter(it)
             recyclerMessages.adapter = adapter
+            recyclerMessages.layoutManager = LinearLayoutManager(context).apply {
+                reverseLayout = true
+                stackFromEnd = true
+            }
         }
     }
 

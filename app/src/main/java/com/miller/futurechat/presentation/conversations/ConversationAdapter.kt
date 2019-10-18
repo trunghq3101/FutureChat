@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.AdapterListUpdateCallback
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListUpdateCallback
 import com.miller.core.domain.model.Conversation
 import com.miller.futurechat.R
 import com.miller.futurechat.databinding.ItemConversationBinding
@@ -14,6 +15,7 @@ import com.miller.paging.PagingAdapter
 
 class ConversationAdapter : PagingAdapter<Conversation>(conversationDiff) {
     override val adapterCallback: AdapterListUpdateCallback = AdapterListUpdateCallback(this)
+    override val listUpdateCallback: ListUpdateCallback = WithNetworkStateListUpdateCallback(adapterCallback)
 
     override fun createNetworkStateViewHolder(parent: ViewGroup): NetworkStateItemViewHolder {
         return DataBindingUtil.inflate<PagingItemStateBinding>(
