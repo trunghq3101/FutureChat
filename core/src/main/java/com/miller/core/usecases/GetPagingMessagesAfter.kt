@@ -9,6 +9,6 @@ import com.miller.core.data.repository.MessageRepository
 class GetPagingMessagesAfter(
     private val messageRepository: MessageRepository
 ) {
-    operator fun invoke(conversationId: String, lastMsgId: String?) =
+    operator fun invoke(conversationId: String, lastMsgId: Int?) =
         messageRepository.getPagingMessagesAfter(conversationId, lastMsgId)
 }

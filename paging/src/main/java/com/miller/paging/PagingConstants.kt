@@ -5,5 +5,5 @@ package com.miller.paging
  */
 
 object PagingConstants {
-    const val MAX_PAGES_IN_MEMORY = 10
+    const val MAX_PAGES_IN_MEMORY = 30
 }

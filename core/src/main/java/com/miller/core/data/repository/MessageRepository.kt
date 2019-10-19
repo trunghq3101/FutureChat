@@ -1,16 +1,25 @@
 package com.miller.core.data.repository
 
-import com.miller.core.data.datasource.MessageDataSource
+import com.miller.core.data.datasource.LocalMessageDataSource
+import com.miller.core.data.datasource.RemoteMessageDataSource
+import com.miller.core.domain.model.Message
+import io.reactivex.Completable
 
 class MessageRepository(
-    private val dataSource: MessageDataSource
+    private val remoteDataSource: RemoteMessageDataSource,
+    private val localDataSource: LocalMessageDataSource
 ) {
     fun getMessages(authToken: String, conversationId: String) =
-        dataSource.readMessages(authToken, conversationId)
+        remoteDataSource.readMessages(authToken, conversationId)
 
-    fun getPagingMessagesAfter(conversationId: String, lastMsgId: String?) =
-        dataSource.readPagingMessagesAfter(conversationId, lastMsgId)
+    fun getPagingMessagesAfter(conversationId: String, lastMsgId: Int?) =
+        remoteDataSource.readPagingMessagesAfter(conversationId, lastMsgId)
 
-    fun getPagingMessagesBefore(convId: String, firstMsgId: String) =
-        dataSource.readPagingMessagesBefore(convId, firstMsgId)
+    fun getPagingMessagesBefore(convId: String, firstMsgId: Int) =
+        remoteDataSource.readPagingMessagesBefore(convId, firstMsgId)
+
+    fun saveMessageLocal(message: Message) = localDataSource.createMessage(message)
+
+    fun saveMessageRemote(message: Message): Completable = remoteDataSource.createMessage(message)
+
 }

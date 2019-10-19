@@ -135,22 +135,22 @@ abstract class PagingAdapter<Item>(
 
         @CallSuper
         override fun onChanged(position: Int, count: Int, payload: Any?) {
-            adapterCallback.onChanged(position + 1, count, payload)
+            adapterCallback.onChanged(position, count, payload)
         }
 
         @CallSuper
         override fun onMoved(fromPosition: Int, toPosition: Int) {
-            adapterCallback.onMoved(fromPosition + 1, toPosition + 1)
+            adapterCallback.onMoved(fromPosition, toPosition)
         }
 
         @CallSuper
         override fun onInserted(position: Int, count: Int) {
-            adapterCallback.onInserted(position + 1, count)
+            adapterCallback.onInserted(position, count)
         }
 
         @CallSuper
         override fun onRemoved(position: Int, count: Int) {
-            adapterCallback.onRemoved(position + 1, count)
+            adapterCallback.onRemoved(position, count)
         }
     }
 

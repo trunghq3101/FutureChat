@@ -8,9 +8,8 @@ import com.miller.futurechat.framework.firestore.CollectionsConstant.Conversatio
 import com.miller.futurechat.framework.model.ConversationEntity
 import com.miller.futurechat.framework.model.mapToDomain
 import com.miller.futurechat.utils.toItemList
-import com.miller.paging.PagingBoundaryCallback
 import com.miller.paging.PagingBoundaryCallback.Companion.PAGE_SIZE
-import com.miller.utils.toSingle
+import com.miller.futurechat.utils.toSingle
 import io.reactivex.Single
 
 class FirestoreConversationDataSource(

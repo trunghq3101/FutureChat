@@ -17,5 +17,5 @@ val repositoryModule = module {
     single { ConversationRepository(get()) }
     single { NotificationTokenRepository(get()) }
     single { AuthenticationRepository(get()) }
-    single { MessageRepository(get()) }
+    single { MessageRepository(get(), get()) }
 }

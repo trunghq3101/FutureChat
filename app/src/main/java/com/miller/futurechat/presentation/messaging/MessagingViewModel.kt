@@ -1,5 +1,6 @@
 package com.miller.futurechat.presentation.messaging
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.miller.core.domain.model.Message
@@ -10,8 +11,9 @@ import com.miller.futurechat.presentation.base.PagingViewModel
 import com.miller.futurechat.utils.EditTextBindingUtils
 import com.miller.futurechat.utils.SchedulersUtils
 import org.koin.core.inject
+import java.util.*
 
-class MessagingViewModel: PagingViewModel<Message>() {
+class MessagingViewModel : PagingViewModel<Message>() {
 
     override val pagingDataLoader: MessagePagingDataLoader by inject()
     override val useCases: UseCases by inject()
@@ -64,12 +66,38 @@ class MessagingViewModel: PagingViewModel<Message>() {
 
     fun loadMsg(conversationId: String) {
         this.conversationId = conversationId
-        (authState.value as? AuthState.LoggedIn)?.token?.let { userId ->
+        getAuthToken()?.let { userId ->
             pagingWrapper.value = pagingDataLoader.fetchPage(userId, conversationId)
         }
     }
 
     fun sendMsg() {
-
+        getAuthToken()?.let { userId ->
+            conversationId?.let { convId ->
+                textMsg.value?.let { text ->
+                    useCases.sendMessage(
+                        Message(
+                            contentText = text,
+                            senderId = userId,
+                            conversationId = convId,
+                            timestamp = Date().time
+                        )
+                    ).compose(SchedulersUtils.applyAsyncSchedulersCompletable())
+                        .subscribe(
+                            {
+                                Log.d("------>"," : sent")
+                                textMsg.value = ""
+                            },
+                            {
+                                onLoadFail(it)
+                            }
+                        ).apply {
+                            addDisposable(this)
+                        }
+                }
+            }
+        }
     }
+
+    private fun getAuthToken() = (authState.value as? AuthState.LoggedIn)?.token
 }

@@ -30,7 +30,11 @@ class MessagingAdapter(
         }
 
         private fun updateRelativePositions(position: Int) {
-            if (position > 0) notifyItemRangeChanged(position - 1, position)
+            if (position > 0) {
+                notifyItemRangeChanged(position - 1, position)
+            } else if (position != itemCount - 1){
+                notifyItemRangeChanged(position + 1, 1)
+            }
         }
     }
 

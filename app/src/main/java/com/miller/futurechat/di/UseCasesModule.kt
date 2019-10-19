@@ -13,7 +13,8 @@ val useCasesModule = module {
             GetMessages(get(), get()),
             GetPagingMessagesAfter(get()),
             GetPagingMessagesBefore(get()),
-            GetPagingConversations(get(), get())
+            GetPagingConversations(get(), get()),
+            SendMessage(get())
         )
     }
 }

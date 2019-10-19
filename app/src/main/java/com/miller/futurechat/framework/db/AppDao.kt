@@ -37,6 +37,12 @@ interface AppDao {
     @Query("SELECT * FROM messages ORDER BY timestamp DESC")
     fun getMessages(): DataSource.Factory<Int, MessageEntity>
 
+    @Query("SELECT * FROM messages ORDER BY timestamp DESC")
+    fun getOldestMessages(): Single<List<MessageEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertMessage(messageEntity: MessageEntity): Single<Long>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertConversations(conversations: List<ConversationEntity>): Single<List<Long>>
 

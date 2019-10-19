@@ -2,14 +2,8 @@ package com.miller.futurechat.di
 
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.firestore.FirebaseFirestore
-import com.miller.core.data.datasource.AuthenticationDataSource
-import com.miller.core.data.datasource.ConversationDataSource
-import com.miller.core.data.datasource.MessageDataSource
-import com.miller.core.data.datasource.NotificationTokenDataSource
-import com.miller.futurechat.framework.datasourceimpl.FirestoreConversationDataSource
-import com.miller.futurechat.framework.datasourceimpl.FirestoreMessageDataSource
-import com.miller.futurechat.framework.datasourceimpl.FirestoreNotificationTokenDataSource
-import com.miller.futurechat.framework.datasourceimpl.PrefAuthenticationDataSource
+import com.miller.core.data.datasource.*
+import com.miller.futurechat.framework.datasourceimpl.*
 import com.miller.futurechat.framework.db.AppDatabase
 import com.miller.futurechat.framework.sharedPref.PrefHelper
 import com.miller.futurechat.framework.sharedPref.SharedPrefApi
@@ -33,5 +27,6 @@ val dataSourceModule = module {
     single<ConversationDataSource> { FirestoreConversationDataSource(get()) }
     single<NotificationTokenDataSource> { FirestoreNotificationTokenDataSource(get()) }
     single<AuthenticationDataSource> { PrefAuthenticationDataSource(get()) }
-    single<MessageDataSource> { FirestoreMessageDataSource(get()) }
+    single<RemoteMessageDataSource> { FirestoreMessageDataSource(get()) }
+    single<LocalMessageDataSource> { RoomDbMessageDataSource(get()) }
 }

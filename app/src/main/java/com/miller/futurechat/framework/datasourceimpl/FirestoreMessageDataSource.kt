@@ -2,37 +2,33 @@ package com.miller.futurechat.framework.datasourceimpl
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.miller.core.data.datasource.MessageDataSource
+import com.miller.core.data.datasource.RemoteMessageDataSource
 import com.miller.core.domain.model.Message
 import com.miller.futurechat.framework.firestore.CollectionsConstant.CONVERSATIONS
 import com.miller.futurechat.framework.firestore.CollectionsConstant.MESSAGES
 import com.miller.futurechat.framework.firestore.CollectionsConstant.MessagesConstant.TIMESTAMP
 import com.miller.futurechat.framework.model.MessageEntity
 import com.miller.futurechat.framework.model.mapToDomain
+import com.miller.futurechat.utils.toCompletable
 import com.miller.futurechat.utils.toItemList
 import com.miller.paging.PagingBoundaryCallback.Companion.PAGE_SIZE
-import com.miller.utils.toSingle
+import com.miller.futurechat.utils.toSingle
+import io.reactivex.Completable
 import io.reactivex.Single
 
 class FirestoreMessageDataSource(
     private val firestore: FirebaseFirestore
-) : MessageDataSource {
+) : RemoteMessageDataSource {
 
     override fun readPagingMessagesBefore(
         convId: String,
-        firstMsgId: String
+        firstMsgId: Int
     ): Single<List<Message>> {
         return Single.create<List<Message>> { emitter ->
-            firestore.collection(CONVERSATIONS)
-                .document(convId)
-                .collection(MESSAGES)
-                .document(firstMsgId)
+            queryOneMsg(convId, firstMsgId)
                 .get()
                 .addOnSuccessListener { docSnap ->
-                    firestore.collection(CONVERSATIONS)
-                        .document(convId)
-                        .collection(MESSAGES)
-                        .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
+                    queryOldestMessages(convId)
                         .endBefore(docSnap)
                         .get()
                         .addOnSuccessListener { querySnap ->
@@ -51,20 +47,14 @@ class FirestoreMessageDataSource(
 
     override fun readPagingMessagesAfter(
         conversationId: String,
-        lastMsgId: String?
+        lastMsgId: Int?
     ): Single<List<Message>> {
         return lastMsgId?.let {
             Single.create<List<Message>> { emitter ->
-                firestore.collection(CONVERSATIONS)
-                    .document(conversationId)
-                    .collection(MESSAGES)
-                    .document(it)
+                queryOneMsg(conversationId, it)
                     .get()
                     .addOnSuccessListener { docSnap ->
-                        firestore.collection(CONVERSATIONS)
-                            .document(conversationId)
-                            .collection(MESSAGES)
-                            .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
+                        queryOldestMessages(conversationId)
                             .limit(PAGE_SIZE.toLong())
                             .startAfter(docSnap)
                             .get()
@@ -81,10 +71,7 @@ class FirestoreMessageDataSource(
                     }
             }
         } ?: run {
-            firestore.collection(CONVERSATIONS)
-                .document(conversationId)
-                .collection(MESSAGES)
-                .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
+            queryOldestMessages(conversationId)
                 .limit(PAGE_SIZE.toLong())
                 .get()
                 .toSingle()
@@ -105,5 +92,24 @@ class FirestoreMessageDataSource(
                 it.toItemList(Message::class.java)
             }
     }
+
+    override fun createMessage(msg: Message): Completable {
+        return queryOneMsg(msg.conversationId, msg.id).set(msg).toCompletable()
+    }
+
+    private fun queryOneMsg(convId: String, msgId: Int) =
+        firestore.collection(CONVERSATIONS)
+            .document(convId)
+            .collection(MESSAGES)
+            .document("$msgId")
+
+    private fun queryOldestMessages(convId: String) = firestore.collection(CONVERSATIONS)
+        .document(convId)
+        .collection(MESSAGES)
+        .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
+
+    private fun queryMessages(convId: String) = firestore.collection(CONVERSATIONS)
+        .document(convId)
+        .collection(MESSAGES)
 
 }

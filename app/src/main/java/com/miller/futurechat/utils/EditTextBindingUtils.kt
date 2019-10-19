@@ -15,7 +15,7 @@ object EditTextBindingUtils {
 fun EditText.setOnTextExistListener(listener: EditTextBindingUtils.OnTextExistListener?) {
     listener ?: return
     addTextChangedListener {
-        if (it?.isNotEmpty() == true) {
+        if (!it.isNullOrBlank()) {
             listener.onTextExist()
         } else {
             listener.onTextEmpty()
