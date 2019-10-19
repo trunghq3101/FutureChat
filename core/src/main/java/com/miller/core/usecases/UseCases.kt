@@ -8,5 +8,6 @@ data class UseCases(
     val getMessages: GetMessages,
     val getPagingMessagesAfter: GetPagingMessagesAfter,
     val getPagingMessagesBefore: GetPagingMessagesBefore,
-    val getPagingConversations: GetPagingConversations
+    val getPagingConversations: GetPagingConversations,
+    val sendMessage: SendMessage
 )

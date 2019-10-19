@@ -9,6 +9,6 @@ import com.miller.core.data.repository.MessageRepository
 class GetPagingMessagesBefore(
     private val messageRepository: MessageRepository
 ) {
-    operator fun invoke(convId: String, firstMsgId: String) =
+    operator fun invoke(convId: String, firstMsgId: Int) =
         messageRepository.getPagingMessagesBefore(convId, firstMsgId)
 }

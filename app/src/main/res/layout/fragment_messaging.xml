@@ -92,6 +92,7 @@
             android:layout_height="0dp"
             android:background="?attr/selectableItemBackground"
             app:booleanVisibility="@{ viewModel.isSendBtnVisible }"
+            app:clickSafe="@{() -> viewModel.sendMsg()}"
             app:layout_constraintBottom_toBottomOf="@id/imageAdd"
             app:layout_constraintEnd_toEndOf="@id/imageAdd"
             app:layout_constraintTop_toTopOf="@id/imageAdd"

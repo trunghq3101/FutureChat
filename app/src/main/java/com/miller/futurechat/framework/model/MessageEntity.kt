@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentId
+import java.util.*
 
 /**
  * Created by Miller on 16/10/2019
@@ -18,19 +18,18 @@ import com.google.firebase.firestore.DocumentId
     )]
 )
 data class MessageEntity(
-    @DocumentId
-    @PrimaryKey
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0,
     val contentText: String,
     val senderId: String,
     val conversationId: String,
-    val timestamp: Timestamp
+    val timestamp: Long
 ) {
     constructor() : this(
-        id = "",
+        id = 0,
         contentText = "",
         senderId = "",
         conversationId = "",
-        timestamp = Timestamp.now()
+        timestamp = Date().time
     )
 }

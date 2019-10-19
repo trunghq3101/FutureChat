@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.miller.core.usecases.model.AuthState
 import com.miller.futurechat.BR
 import com.miller.futurechat.R
@@ -56,7 +57,14 @@ class MessagingFragment : BaseFragment<FragmentMessagingBinding, MessagingViewMo
 
     private fun setupMessagesRecycler() {
         (viewModel.authState.value as? AuthState.LoggedIn)?.token?.let {
-            adapter = MessagingAdapter(it)
+            adapter = MessagingAdapter(it).apply {
+                registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                    override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                        super.onItemRangeInserted(positionStart, itemCount)
+                        if (positionStart == 0) recyclerMessages.smoothScrollToPosition(positionStart)
+                    }
+                })
+            }
             recyclerMessages.adapter = adapter
             recyclerMessages.layoutManager = LinearLayoutManager(context).apply {
                 reverseLayout = true
