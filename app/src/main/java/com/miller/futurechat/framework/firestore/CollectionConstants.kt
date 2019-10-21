@@ -4,6 +4,7 @@ object CollectionsConstant {
     const val NOTIFICATION_TOKENS = "notificationTokens"
     const val CONVERSATIONS = "conversations"
     const val MESSAGES = "messages"
+    const val USERS = "users"
     object NotificationTokensConstant {
         const val TOKENS = "tokens"
         const val USER_ID = "userId"

@@ -22,5 +22,6 @@
     <dimen name="messaging_item_max_width">300sp</dimen>
     <dimen name="messaging_item_spacing">2dp</dimen>
     <dimen name="messaging_item_margin">17dp</dimen>
+    <dimen name="conversations_profile_size">40dp</dimen>
 
 </resources>

@@ -3,13 +3,11 @@ package com.miller.futurechat.presentation.login
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
-import com.miller.core.domain.model.User
 import com.miller.core.usecases.model.AuthState
 import com.miller.futurechat.R
 import org.koin.android.ext.android.inject
@@ -29,7 +27,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        Log.d("------>"," : onCreate")
         observeField()
         viewModel.loadLoggedInStatus()
     }
