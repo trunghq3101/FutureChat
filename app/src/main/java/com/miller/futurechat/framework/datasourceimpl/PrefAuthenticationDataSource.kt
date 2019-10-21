@@ -1,12 +1,12 @@
 package com.miller.futurechat.framework.datasourceimpl
 
-import com.miller.core.data.datasource.AuthenticationDataSource
+import com.miller.core.data.datasource.LocalAuthDataSource
 import com.miller.futurechat.framework.sharedPref.PrefHelper
 import io.reactivex.Single
 
 class PrefAuthenticationDataSource(
     private val prefHelper: PrefHelper
-): AuthenticationDataSource {
+): LocalAuthDataSource {
 
     override fun readToken(): Single<String> {
         return Single.create { emitter ->

@@ -26,7 +26,8 @@ val dataSourceModule = module {
 
     single<ConversationDataSource> { FirestoreConversationDataSource(get()) }
     single<NotificationTokenDataSource> { FirestoreNotificationTokenDataSource(get()) }
-    single<AuthenticationDataSource> { PrefAuthenticationDataSource(get()) }
+    single<LocalAuthDataSource> { PrefAuthenticationDataSource(get()) }
+    single<RemoteAuthDataSource> { FirestoreAuthDataSource(get()) }
     single<RemoteMessageDataSource> { FirestoreMessageDataSource(get()) }
     single<LocalMessageDataSource> { RoomDbMessageDataSource(get()) }
 }

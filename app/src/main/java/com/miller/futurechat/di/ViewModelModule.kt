@@ -2,6 +2,7 @@ package com.miller.futurechat.di
 
 import com.miller.futurechat.framework.widget.ConversationPagingDataLoader
 import com.miller.futurechat.framework.widget.MessagePagingDataLoader
+import com.miller.futurechat.presentation.MainViewModel
 import com.miller.futurechat.presentation.conversations.ConversationsViewModel
 import com.miller.futurechat.presentation.login.LoginViewModel
 import com.miller.futurechat.presentation.messaging.MessagingViewModel
@@ -17,6 +18,7 @@ val viewModelModule = module {
     factory { ConversationPagingDataLoader(get(), get()) }
 
     viewModel { LoginViewModel() }
+    viewModel { MainViewModel() }
     viewModel { ConversationsViewModel() }
     viewModel { MessagingViewModel() }
 }

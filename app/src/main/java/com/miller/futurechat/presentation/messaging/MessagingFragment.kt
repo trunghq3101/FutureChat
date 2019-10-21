@@ -70,6 +70,11 @@ class MessagingFragment : BaseFragment<FragmentMessagingBinding, MessagingViewMo
                 reverseLayout = true
                 stackFromEnd = true
             }
+            recyclerMessages.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+                if (bottom < oldBottom) {
+                    recyclerMessages.smoothScrollToPosition(0)
+                }
+            }
         }
     }
 
