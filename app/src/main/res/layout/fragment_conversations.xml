@@ -8,6 +8,10 @@
         <variable
             name="viewModel"
             type="com.miller.futurechat.presentation.conversations.ConversationsViewModel" />
+
+        <variable
+            name="userInfo"
+            type="com.miller.futurechat.presentation.model.UserItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,18 +24,21 @@
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/color_white"
+            android:elevation="@dimen/toolbar_elevation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:elevation="@dimen/toolbar_elevation">
+                android:layout_height="match_parent">
 
                 <ImageView
+                    android:id="@+id/imgProfile"
                     android:layout_width="@dimen/conversations_profile_size"
                     android:layout_height="@dimen/conversations_profile_size"
+                    app:clickSafe="@{ () -> viewModel.navigateToProfile() }"
+                    app:glideCircularUrl="@{ userInfo.avatarUrl }"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

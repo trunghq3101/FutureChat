@@ -14,7 +14,7 @@ fun <Item> PagingDataLoader<Item>.fetchPage(): LivePagingWrapper<Item> {
     val boundaryCallback = PagingBoundaryCallback(Executors.newSingleThreadExecutor(), this)
     return LivePagingWrapper(
         livePagedList = fetchPageFromLocal().toLiveData(
-            config = Config(pageSize = PAGE_SIZE, maxSize = MAX_PAGES_IN_MEMORY, enablePlaceholders = false),
+            config = Config(pageSize = PAGE_SIZE, enablePlaceholders = false),
             boundaryCallback = boundaryCallback
         ),
         liveNetworkState = boundaryCallback.liveNetworkState

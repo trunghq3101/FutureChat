@@ -1,6 +1,7 @@
 package com.miller.futurechat.presentation.messaging
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +21,7 @@ class MessagingFragment : BaseFragment<FragmentMessagingBinding, MessagingViewMo
     override val bindingVar: Int = BR.viewModel
 
     private val args: MessagingFragmentArgs by navArgs()
-    private lateinit var adapter: MessagingAdapter
+    private lateinit var messagingAdapter: MessagingAdapter
 
     override fun initView() {
         super.initView()
@@ -47,34 +48,57 @@ class MessagingFragment : BaseFragment<FragmentMessagingBinding, MessagingViewMo
                 }
             })
             pagedList.observe(viewLifecycleOwner, Observer {
-                adapter.submitList(it)
+                messagingAdapter.submitList(it)
             })
             networkState.observe(viewLifecycleOwner, Observer {
-                adapter.networkState = it
+                messagingAdapter.networkState = it
             })
         }
     }
 
     private fun setupMessagesRecycler() {
         (viewModel.authState.value as? AuthState.LoggedIn)?.token?.let {
-            adapter = MessagingAdapter(it).apply {
-                registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+
+            val obsScrollBottomWhenNewItemAdded =
+                object : RecyclerView.AdapterDataObserver() {
                     override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                         super.onItemRangeInserted(positionStart, itemCount)
-                        if (positionStart == 0) recyclerMessages.smoothScrollToPosition(positionStart)
+                        if (positionStart == 0) recyclerMessages.smoothScrollToPosition(
+                            positionStart
+                        )
                     }
-                })
-            }
-            recyclerMessages.adapter = adapter
-            recyclerMessages.layoutManager = LinearLayoutManager(context).apply {
-                reverseLayout = true
-                stackFromEnd = true
-            }
-            recyclerMessages.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-                if (bottom < oldBottom) {
-                    recyclerMessages.smoothScrollToPosition(0)
                 }
+            val obsScrollBottomWhenKeyboardShowed =
+                View.OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+                    if (bottom < oldBottom) {
+                        recyclerMessages.smoothScrollToPosition(0)
+                    }
+                }
+            val obsTrimWhenListOverSized =
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        super.onScrollStateChanged(recyclerView, newState)
+                        when (newState) {
+                            RecyclerView.SCROLL_STATE_IDLE -> if (viewModel.pagedList.value?.loadedCount ?: 0 > 40 && (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() == 0) {
+                                viewModel.pagedList.value?.dataSource?.invalidate()
+                            }
+                        }
+                    }
+                }
+
+            messagingAdapter = MessagingAdapter(it).apply {
+                registerAdapterDataObserver(obsScrollBottomWhenNewItemAdded)
             }
+            with(recyclerMessages) {
+                adapter = messagingAdapter
+                layoutManager = LinearLayoutManager(context).apply {
+                    reverseLayout = true
+                    stackFromEnd = true
+                }
+                addOnLayoutChangeListener(obsScrollBottomWhenKeyboardShowed)
+                addOnScrollListener(obsTrimWhenListOverSized)
+            }
+
         }
     }
 

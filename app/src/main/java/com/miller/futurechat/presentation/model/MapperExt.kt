@@ -2,6 +2,7 @@ package com.miller.futurechat.presentation.model
 
 import com.miller.core.domain.model.Conversation
 import com.miller.core.domain.model.Message
+import com.miller.core.domain.model.User
 import com.miller.futurechat.presentation.model.type.OwnerType
 import com.miller.futurechat.presentation.model.type.RelativePositionType.*
 
@@ -34,4 +35,8 @@ fun Message.mapToPresentation(
         ownerType = if (senderId == userId) OwnerType.Me else OwnerType.Other,
         relativePosition = position
     )
+}
+
+fun User.mapToPresentation(): UserItem {
+    return UserItem(id, avatarUrl)
 }

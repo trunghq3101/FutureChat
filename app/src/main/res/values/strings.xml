@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Future Chat</string>
     <string name="messaging_input_text_hint">Aa</string>
+    <string name="profile_sign_out">Sign out</string>
 </resources>

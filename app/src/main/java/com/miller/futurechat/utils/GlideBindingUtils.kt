@@ -21,3 +21,12 @@ fun ImageView.setGlideCircularUrl(url: String?) {
             .into(this)
     }
 }
+
+@BindingAdapter("glideUrl")
+fun ImageView.setGlideUrl(url: String?) {
+    url?.let {
+        Glide.with(context)
+            .load(url)
+            .into(this)
+    }
+}

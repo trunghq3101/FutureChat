@@ -5,6 +5,18 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/blankFragment">
 
+    <action
+        android:id="@+id/action_to_blank"
+        app:destination="@id/blankFragment"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/conversationsFragment"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/action_to_messaging"
+        app:destination="@id/messagingFragment"
+        app:launchSingleTop="true" />
+
     <fragment
         android:id="@+id/blankFragment"
         android:name="com.miller.futurechat.presentation.blank.BlankFragment"
@@ -13,6 +25,7 @@
         <action
             android:id="@+id/action_blank_to_conversations"
             app:destination="@id/conversationsFragment"
+            app:launchSingleTop="true"
             app:popUpTo="@id/blankFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -25,6 +38,9 @@
             android:id="@+id/action_conversations_to_messaging"
             app:destination="@id/messagingFragment"
             app:launchSingleTop="true" />
+        <action
+            android:id="@+id/action_conversations_to_profile"
+            app:destination="@id/profileFragment" />
     </fragment>
 
     <fragment
@@ -36,5 +52,11 @@
             android:name="conversationId"
             app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.miller.futurechat.presentation.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>
