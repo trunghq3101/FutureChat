@@ -8,6 +8,8 @@ class PrefHelper(
 
     fun setToken(token: String) = prefApi.set(KEY_AUTH_TOKEN, token)
 
+    fun deleteToken() = prefApi.remove(KEY_AUTH_TOKEN)
+
     companion object {
         const val KEY_AUTH_TOKEN = "AuthToken"
     }

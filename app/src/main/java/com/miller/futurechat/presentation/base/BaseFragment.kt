@@ -25,7 +25,7 @@ abstract class BaseFragment<ViewBinding: ViewDataBinding, ViewModel: BaseViewMod
     abstract val viewModel: ViewModel
     abstract val bindingVar: Int
 
-    private lateinit var viewBinding: ViewBinding
+    protected lateinit var viewBinding: ViewBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,

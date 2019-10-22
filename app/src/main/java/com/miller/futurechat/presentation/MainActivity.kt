@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
@@ -23,30 +24,48 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModel()
     private val authIntent by inject<Intent>(named("authIntent"))
 
+    private val firebaseAuth: FirebaseAuth by lazy {
+        FirebaseAuth.getInstance()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel.loadLoggedInStatus()
+
+        viewModel.loadAuthState()
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         intent?.getStringExtra(EXTRA_CONVERSATION_ID)?.let {
-            hostNavController().navigate(ConversationsFragmentDirections.actionConversationsToMessaging(it))
+            hostNavController().navigate(R.id.action_to_messaging, Bundle().apply {
+                putString(EXTRA_CONVERSATION_ID, it)
+            })
         }
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel.loggedInStatus.observe(this, Observer {
-            when (it) {
-                is AuthState.LoggedIn ->
-                    hostNavController().navigate(BlankFragmentDirections.actionBlankToConversations())
-                is AuthState.LoggedOut -> startActivityForResult(
-                    authIntent,
-                    REQ_CODE_SIGN_IN
-                )
+        viewModel.authState.observe(this, Observer {
+            when (it.getContentIfNotHandled()) {
+                is AuthState.LoggedIn -> {
+                    if (hostNavController().currentDestination?.id == R.id.blankFragment) hostNavController().navigate(
+                        BlankFragmentDirections.actionBlankToConversations()
+                    )
+                }
+                is AuthState.LoggedOut -> {
+                    if (hostNavController().currentDestination?.id != R.id.blankFragment) hostNavController().navigate(
+                        R.id.action_to_blank
+                    )
+                    startActivityForResult(
+                        authIntent,
+                        REQ_CODE_SIGN_IN
+                    )
+                }
             }
+        })
+        viewModel.signingOut.observe(this, Observer {
+            if (it) AuthUI.getInstance().signOut(this)
         })
     }
 
@@ -63,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-                FirebaseAuth.getInstance().currentUser?.uid?.let {
+                firebaseAuth.currentUser?.uid?.let {
                     viewModel.saveAuthToken(it)
                     registerFCMInstanceId()
                 } ?: run {

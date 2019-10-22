@@ -1,5 +1,6 @@
 package com.miller.futurechat.presentation.messaging
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -26,6 +27,7 @@ class MessagingAdapter(
     override val listUpdateCallback: ListUpdateCallback = object : WithNetworkStateListUpdateCallback(adapterCallback) {
         override fun onInserted(position: Int, count: Int) {
             super.onInserted(position, count)
+            Log.d("----->","MessagingAdapter - onInserted : $position - $count")
             updateRelativePositions(position)
         }
 

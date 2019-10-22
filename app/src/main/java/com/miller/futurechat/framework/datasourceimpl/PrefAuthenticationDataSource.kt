@@ -25,4 +25,11 @@ class PrefAuthenticationDataSource(
         }
     }
 
+    override fun deleteToken(): Single<Boolean> {
+        return Single.create { emitter ->
+            prefHelper.deleteToken()
+            emitter.onSuccess(true)
+        }
+    }
+
 }

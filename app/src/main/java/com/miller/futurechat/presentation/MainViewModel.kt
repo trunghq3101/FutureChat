@@ -1,9 +1,15 @@
 package com.miller.futurechat.presentation
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.miller.core.usecases.UseCases
 import com.miller.core.usecases.model.AuthState
 import com.miller.futurechat.presentation.base.BaseViewModel
+import com.miller.futurechat.presentation.model.UserItem
+import com.miller.futurechat.utils.Event
 import com.miller.futurechat.utils.SchedulersUtils
 import com.miller.futurechat.utils.SingleLiveEvent
 import org.koin.core.inject
@@ -16,27 +22,42 @@ class MainViewModel : BaseViewModel() {
 
     override val useCases: UseCases by inject()
 
-    var authToken: String? = null
+    private val firebaseAuth: FirebaseAuth by lazy {
+        FirebaseAuth.getInstance()
+    }
+    private val authStateListener: FirebaseAuth.AuthStateListener by lazy {
+        FirebaseAuth.AuthStateListener {
+            firebaseAuth.currentUser?.let {
+                if (firebaseUser.value != it) {
+                    _firebaseUser.value = it
+                    _authState.value = Event(AuthState.LoggedIn(it.uid))
+                }
+            } ?: run {
+                if (authState.value?.peekContent() !is AuthState.LoggedOut) _authState.value =
+                    Event(AuthState.LoggedOut)
+            }
+        }
+    }
 
     /*
     Observables
      */
-    val loggedInStatus = SingleLiveEvent<AuthState>()
+    private val _firebaseUser = MutableLiveData<FirebaseUser>()
+    val firebaseUser: LiveData<FirebaseUser> = _firebaseUser
 
-    fun loadLoggedInStatus() {
-        useCases.getAuthState()
-            .compose(SchedulersUtils.applyAsyncSchedulersSingle())
-            .subscribe(
-                {
-                    loggedInStatus.value = it
-                    authToken = (it as? AuthState.LoggedIn)?.token
-                },
-                {
-                    loggedInStatus.value = AuthState.LoggedOut
-                }
-            ).apply {
-                addDisposable(this)
-            }
+    private val _userInfo = MutableLiveData<UserItem>()
+    val userInfo: LiveData<UserItem> = _userInfo
+
+    private val _authState = MutableLiveData<Event<AuthState>>()
+    val authState: LiveData<Event<AuthState>> = _authState
+
+    val signingOut = SingleLiveEvent<Boolean>()
+    /*
+    -----------
+     */
+
+    fun loadAuthState() {
+        firebaseAuth.addAuthStateListener(authStateListener)
     }
 
     fun saveAuthToken(token: String) {
@@ -44,7 +65,7 @@ class MainViewModel : BaseViewModel() {
             .compose(SchedulersUtils.applyAsyncSchedulersSingle())
             .subscribe(
                 {
-                    loadLoggedInStatus()
+                    loadAuthState()
                 },
                 {
                     onLoadFail(it)
@@ -55,12 +76,12 @@ class MainViewModel : BaseViewModel() {
     }
 
     fun saveFCMToken(token: String) {
-        authToken?.let {
+        firebaseUser.value?.uid?.let {
             useCases.addNotificationToken(token, it)
                 .compose(SchedulersUtils.applyAsyncSchedulersSingle())
                 .subscribe(
                     {
-                        Log.d("----->","MainViewModel - saveFCMToken : ")
+                        Log.d("----->", "MainViewModel - saveFCMToken : ")
                     },
                     { t ->
                         onLoadFail(t)
@@ -69,5 +90,9 @@ class MainViewModel : BaseViewModel() {
                     addDisposable(this)
                 }
         }
+    }
+
+    fun signOut() {
+        signingOut.value = true
     }
 }

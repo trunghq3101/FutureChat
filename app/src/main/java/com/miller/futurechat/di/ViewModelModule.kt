@@ -6,6 +6,7 @@ import com.miller.futurechat.presentation.MainViewModel
 import com.miller.futurechat.presentation.conversations.ConversationsViewModel
 import com.miller.futurechat.presentation.login.LoginViewModel
 import com.miller.futurechat.presentation.messaging.MessagingViewModel
+import com.miller.futurechat.presentation.profile.ProfileViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -21,4 +22,5 @@ val viewModelModule = module {
     viewModel { MainViewModel() }
     viewModel { ConversationsViewModel() }
     viewModel { MessagingViewModel() }
+    viewModel { ProfileViewModel() }
 }
