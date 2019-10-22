@@ -7,7 +7,7 @@ import com.miller.core.utils.UseCaseUtils
  * Created by Miller on 21/10/2019
  */
 
-class GetUserInfo(
+class LoadUserInfo(
     private val authenticationRepository: AuthenticationRepository
 ) {
     operator fun invoke() = UseCaseUtils.withAuthenticated(authenticationRepository) {

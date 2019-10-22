@@ -1,16 +1,11 @@
 package com.miller.core.usecases
 
 data class UseCases(
-    val getConversations: GetConversations,
-    val getAuthState: GetAuthState,
-    val saveAuthToken: SaveAuthToken,
-    val getUserInfo: GetUserInfo,
-    val signOut: SignOut,
+    val loadUserInfo: LoadUserInfo,
     val addNotificationToken: AddNotificationToken,
-    val getMessages: GetMessages,
-    val getPagingMessagesAfter: GetPagingMessagesAfter,
-    val getPagingMessagesBefore: GetPagingMessagesBefore,
-    val getPagingConversations: GetPagingConversations,
+    val loadPagedMessagesAfter: LoadPagedMessagesAfter,
+    val loadPagedMessagesBefore: LoadPagedMessagesBefore,
+    val loadPagedConversations: LoadPagedConversations,
     val sendMessage: SendMessage,
     val receiveMessage: ReceiveMessage,
     val saveMessageLocal: SaveMessageLocal

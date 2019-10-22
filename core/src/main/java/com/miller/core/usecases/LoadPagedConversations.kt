@@ -8,7 +8,7 @@ import com.miller.core.utils.UseCaseUtils
  * Created by Miller on 17/10/2019
  */
 
-class GetPagingConversations(
+class LoadPagedConversations(
     private val authenticationRepository: AuthenticationRepository,
     private val conversationRepository: ConversationRepository
 ) {

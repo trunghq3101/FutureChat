@@ -5,10 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.iid.FirebaseInstanceId
 import com.miller.core.usecases.UseCases
 import com.miller.core.usecases.model.AuthState
 import com.miller.futurechat.presentation.base.BaseViewModel
 import com.miller.futurechat.presentation.model.UserItem
+import com.miller.futurechat.presentation.model.mapToPresentation
 import com.miller.futurechat.utils.Event
 import com.miller.futurechat.utils.SchedulersUtils
 import com.miller.futurechat.utils.SingleLiveEvent
@@ -22,19 +24,16 @@ class MainViewModel : BaseViewModel() {
 
     override val useCases: UseCases by inject()
 
-    private val firebaseAuth: FirebaseAuth by lazy {
-        FirebaseAuth.getInstance()
-    }
+    private val firebaseAuth: FirebaseAuth by inject()
+
     private val authStateListener: FirebaseAuth.AuthStateListener by lazy {
         FirebaseAuth.AuthStateListener {
             firebaseAuth.currentUser?.let {
-                if (firebaseUser.value != it) {
-                    _firebaseUser.value = it
+                if (!isLoggedIn(it.uid))
                     _authState.value = Event(AuthState.LoggedIn(it.uid))
-                }
             } ?: run {
-                if (authState.value?.peekContent() !is AuthState.LoggedOut) _authState.value =
-                    Event(AuthState.LoggedOut)
+                if (!isLoggedOut())
+                    _authState.value = Event(AuthState.LoggedOut)
             }
         }
     }
@@ -42,9 +41,6 @@ class MainViewModel : BaseViewModel() {
     /*
     Observables
      */
-    private val _firebaseUser = MutableLiveData<FirebaseUser>()
-    val firebaseUser: LiveData<FirebaseUser> = _firebaseUser
-
     private val _userInfo = MutableLiveData<UserItem>()
     val userInfo: LiveData<UserItem> = _userInfo
 
@@ -60,12 +56,12 @@ class MainViewModel : BaseViewModel() {
         firebaseAuth.addAuthStateListener(authStateListener)
     }
 
-    fun saveAuthToken(token: String) {
-        useCases.saveAuthToken(token)
+    fun loadUserInfo() {
+        useCases.loadUserInfo()
             .compose(SchedulersUtils.applyAsyncSchedulersSingle())
             .subscribe(
                 {
-                    loadAuthState()
+                    _userInfo.value = it.mapToPresentation()
                 },
                 {
                     onLoadFail(it)
@@ -75,24 +71,46 @@ class MainViewModel : BaseViewModel() {
             }
     }
 
-    fun saveFCMToken(token: String) {
-        firebaseUser.value?.uid?.let {
-            useCases.addNotificationToken(token, it)
-                .compose(SchedulersUtils.applyAsyncSchedulersSingle())
-                .subscribe(
-                    {
-                        Log.d("----->", "MainViewModel - saveFCMToken : ")
-                    },
-                    { t ->
-                        onLoadFail(t)
-                    }
-                ).apply {
-                    addDisposable(this)
+    fun registerFCMInstanceId() {
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener {
+                if (!it.isSuccessful) {
+                    Log.d("----->", "MainActivity - registerFCMInstanceId : Unsuccessfully")
+                    return@addOnCompleteListener
                 }
-        }
+                it.result?.token?.let { token ->
+                    saveFCMToken(token)
+                }
+            }
+            .addOnFailureListener {
+                it.printStackTrace()
+            }
     }
 
     fun signOut() {
         signingOut.value = true
     }
+
+    fun peekUserId() = (authState.value?.peekContent() as? AuthState.LoggedIn)?.token
+
+    private fun saveFCMToken(token: String) {
+        useCases.addNotificationToken(token)
+            .compose(SchedulersUtils.applyAsyncSchedulersSingle())
+            .subscribe(
+                {
+                    Log.d("----->", "MainViewModel - saveFCMToken : ")
+                },
+                { t ->
+                    onLoadFail(t)
+                }
+            ).apply {
+                addDisposable(this)
+            }
+    }
+
+    private fun isLoggedIn(userId: String) =
+        (authState.value?.peekContent() as? AuthState.LoggedIn)?.token == userId
+
+    private fun isLoggedOut() =
+        (authState.value?.peekContent() is AuthState.LoggedOut)
 }

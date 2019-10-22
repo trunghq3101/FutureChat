@@ -8,7 +8,5 @@ class AuthenticationRepository(
     private val remoteDataSource: RemoteAuthDataSource
 ) {
     fun getToken() = localDataSource.readToken()
-    fun updateToken(token: String) = localDataSource.updateToken(token)
     fun getUserInfo(token: String) = remoteDataSource.getUserInfo(token)
-    fun signOut() = localDataSource.deleteToken()
 }

@@ -10,6 +10,8 @@ object UseCaseUtils {
         authenticationRepository: AuthenticationRepository,
         consumer: (token: String) -> SingleSource<T>
     ): Single<T> {
-        return authenticationRepository.getToken().flatMap(consumer)
+        return Single.create<String> {
+            authenticationRepository.getToken()
+        }.flatMap(consumer)
     }
 }
