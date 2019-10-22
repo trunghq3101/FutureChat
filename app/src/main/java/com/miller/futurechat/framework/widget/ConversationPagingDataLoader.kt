@@ -18,7 +18,9 @@ class ConversationPagingDataLoader(
     private val appDao: AppDao
 ) : PagingDataLoader<Conversation> {
     override fun fetchPageFromLocal(): DataSource.Factory<Int, Conversation> {
-        return appDao.getConversations().map { it.mapToDomain() }
+        return appDao.getConversations().map {
+            it.mapToDomain()
+        }
     }
 
     override fun fetchBefore(firstItem: Conversation): Single<List<Conversation>> {
