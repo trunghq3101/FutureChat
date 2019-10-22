@@ -75,18 +75,19 @@ class MessagingViewModel : PagingViewModel<Message>() {
         getAuthToken()?.let { userId ->
             conversationId?.let { convId ->
                 textMsg.value?.let { text ->
-                    useCases.sendMessage(
-                        Message(
-                            contentText = text,
-                            senderId = userId,
-                            conversationId = convId,
-                            timestamp = Date().time
-                        )
-                    ).compose(SchedulersUtils.applyAsyncSchedulersCompletable())
+                    val newMsg = Message(
+                        contentText = text,
+                        senderId = userId,
+                        conversationId = convId,
+                        timestamp = Date().time
+                    )
+                    useCases.saveMessageLocal(newMsg)
+                        .compose(SchedulersUtils.applyAsyncSchedulersSingle())
                         .subscribe(
                             {
-                                Log.d("------>"," : sent")
+                                Log.d("------>"," : saved")
                                 textMsg.value = ""
+                                sendMsgToRemote(newMsg.apply { id = it })
                             },
                             {
                                 onLoadFail(it)
@@ -97,6 +98,20 @@ class MessagingViewModel : PagingViewModel<Message>() {
                 }
             }
         }
+    }
+
+    private fun sendMsgToRemote(newMsg: Message) {
+        useCases.sendMessage(newMsg).compose(SchedulersUtils.applyAsyncSchedulersCompletable())
+            .subscribe(
+                {
+                    Log.d("------>"," : sent")
+                },
+                {
+                    onLoadFail(it)
+                }
+            ).apply {
+                addDisposable(this)
+            }
     }
 
     private fun getAuthToken() = (authState.value as? AuthState.LoggedIn)?.token

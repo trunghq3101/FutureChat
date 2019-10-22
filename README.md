@@ -20,7 +20,10 @@ At the moment, this project is including:
 - Firebase Cloud Messaging
 - Firebase Authentication
 - Navigation Component
+- Paging (with database + network)
+- Room Database
 
 ## To-do list:
 - Handle unused Tokens of FCM
 - Check Google Play Service availability
+- Firebase functions to sanitize user input

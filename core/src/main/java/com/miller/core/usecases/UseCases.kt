@@ -12,5 +12,6 @@ data class UseCases(
     val getPagingMessagesBefore: GetPagingMessagesBefore,
     val getPagingConversations: GetPagingConversations,
     val sendMessage: SendMessage,
-    val receiveMessage: ReceiveMessage
+    val receiveMessage: ReceiveMessage,
+    val saveMessageLocal: SaveMessageLocal
 )
