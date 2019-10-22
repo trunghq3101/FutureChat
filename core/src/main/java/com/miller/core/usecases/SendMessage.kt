@@ -7,11 +7,5 @@ class SendMessage(
     private val messageRepository: MessageRepository
 ) {
     operator fun invoke(msg: Message) =
-        messageRepository.saveMessageLocal(msg).flatMapCompletable { newId ->
-            messageRepository.saveMessageRemote(
-                msg.copy(
-                    id = newId
-                )
-            )
-        }
+        messageRepository.saveMessageRemote(msg)
 }
