@@ -3,18 +3,14 @@ package com.miller.futurechat.presentation
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.iid.FirebaseInstanceId
 import com.miller.core.usecases.model.AuthState
 import com.miller.futurechat.R
 import com.miller.futurechat.presentation.blank.BlankFragmentDirections
-import com.miller.futurechat.presentation.conversations.ConversationsFragmentDirections
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
@@ -23,10 +19,6 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModel()
     private val authIntent by inject<Intent>(named("authIntent"))
-
-    private val firebaseAuth: FirebaseAuth by lazy {
-        FirebaseAuth.getInstance()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +44,7 @@ class MainActivity : AppCompatActivity() {
                     if (hostNavController().currentDestination?.id == R.id.blankFragment) hostNavController().navigate(
                         BlankFragmentDirections.actionBlankToConversations()
                     )
+                    viewModel.loadUserInfo()
                 }
                 is AuthState.LoggedOut -> {
                     if (hostNavController().currentDestination?.id != R.id.blankFragment) hostNavController().navigate(
@@ -82,34 +75,13 @@ class MainActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-                firebaseAuth.currentUser?.uid?.let {
-                    viewModel.saveAuthToken(it)
-                    registerFCMInstanceId()
-                } ?: run {
-                    Log.d("----->", "MainActivity - onActivityResult : User not available")
-                }
+                viewModel.registerFCMInstanceId()
             } else {
                 if (response == null) {
                     finish()
                 }
             }
         }
-    }
-
-    private fun registerFCMInstanceId() {
-        FirebaseInstanceId.getInstance().instanceId
-            .addOnCompleteListener {
-                if (!it.isSuccessful) {
-                    Log.d("----->", "MainActivity - registerFCMInstanceId : Unsuccessfully")
-                    return@addOnCompleteListener
-                }
-                it.result?.token?.let { token ->
-                    viewModel.saveFCMToken(token)
-                }
-            }
-            .addOnFailureListener {
-                it.printStackTrace()
-            }
     }
 
     private fun hostNavController() = findNavController(R.id.nav_host_fragment)

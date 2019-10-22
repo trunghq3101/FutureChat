@@ -6,16 +6,11 @@ import org.koin.dsl.module
 val useCasesModule = module {
     single {
         UseCases(
-            GetConversations(get(), get()),
-            GetAuthState(get()),
-            SaveAuthToken(get()),
-            GetUserInfo(get()),
-            SignOut(get()),
-            AddNotificationToken(get()),
-            GetMessages(get(), get()),
-            GetPagingMessagesAfter(get()),
-            GetPagingMessagesBefore(get()),
-            GetPagingConversations(get(), get()),
+            LoadUserInfo(get()),
+            AddNotificationToken(get(), get()),
+            LoadPagedMessagesAfter(get()),
+            LoadPagedMessagesBefore(get()),
+            LoadPagedConversations(get(), get()),
             SendMessage(get()),
             ReceiveMessage(get()),
             SaveMessageLocal(get())

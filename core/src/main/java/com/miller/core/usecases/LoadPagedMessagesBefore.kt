@@ -6,7 +6,7 @@ import com.miller.core.data.repository.MessageRepository
  * Created by Miller on 17/10/2019
  */
 
-class GetPagingMessagesBefore(
+class LoadPagedMessagesBefore(
     private val messageRepository: MessageRepository
 ) {
     operator fun invoke(convId: String, firstMsgId: Int) =

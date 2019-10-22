@@ -29,11 +29,11 @@ class MessagePagingDataLoader(
     }
 
     override fun fetchBefore(firstItem: Message): Single<List<Message>> {
-        return useCases.getPagingMessagesBefore(conversationId, firstItem.id)
+        return useCases.loadPagedMessagesBefore(conversationId, firstItem.id)
     }
 
     override fun fetchAfter(lastItem: Message?): Single<List<Message>> {
-        return useCases.getPagingMessagesAfter(conversationId, lastItem?.id)
+        return useCases.loadPagedMessagesAfter(conversationId, lastItem?.id)
     }
 
     override fun savePageToLocal(items: List<Message>): Single<List<Long>> {

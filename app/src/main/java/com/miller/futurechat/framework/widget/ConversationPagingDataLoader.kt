@@ -28,7 +28,7 @@ class ConversationPagingDataLoader(
     }
 
     override fun fetchAfter(lastItem: Conversation?): Single<List<Conversation>> {
-        return useCases.getPagingConversations(lastItem?.id)
+        return useCases.loadPagedConversations(lastItem?.id)
     }
 
     override fun savePageToLocal(items: List<Conversation>): Single<List<Long>> {

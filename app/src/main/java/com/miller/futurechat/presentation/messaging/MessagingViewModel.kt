@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.miller.core.domain.model.Message
 import com.miller.core.usecases.UseCases
-import com.miller.core.usecases.model.AuthState
 import com.miller.futurechat.framework.widget.MessagePagingDataLoader
 import com.miller.futurechat.presentation.base.PagingViewModel
 import com.miller.futurechat.utils.EditTextBindingUtils
@@ -28,6 +27,7 @@ class MessagingViewModel : PagingViewModel<Message>() {
         }
     }
 
+    private var userId: String? = null
     private var conversationId: String? = null
 
     /*
@@ -35,9 +35,6 @@ class MessagingViewModel : PagingViewModel<Message>() {
      */
     private val _isSendBtnVisible = MutableLiveData<Boolean>().apply { value = false }
     val isSendBtnVisible: LiveData<Boolean> = _isSendBtnVisible
-
-    private val _authState = MutableLiveData<AuthState>()
-    val authState: LiveData<AuthState> = _authState
 
     val textMsg = MutableLiveData<String>()
     /*
@@ -48,63 +45,38 @@ class MessagingViewModel : PagingViewModel<Message>() {
         _isSendBtnVisible.value = isVisible
     }
 
-    fun loadAuthState() {
-        useCases.getAuthState()
-            .compose(SchedulersUtils.applyAsyncSchedulersSingle())
-            .subscribe(
-                {
-                    _authState.value = it
-                },
-                {
-                    onLoadFail(it)
-                    _authState.value = AuthState.LoggedOut
-                }
-            ).apply {
-                addDisposable(this)
-            }
+    fun changeUserId(userId: String?) {
+        this.userId = userId
     }
 
-    fun loadMsg(conversationId: String) {
+    fun loadMsg(userId: String?, conversationId: String) {
+        userId ?: return
+        this.userId = userId
         this.conversationId = conversationId
-        getAuthToken()?.let { userId ->
-            pagingWrapper.value = pagingDataLoader.fetchPage(userId, conversationId)
-        }
+        pagingWrapper.value = pagingDataLoader.fetchPage(userId, conversationId)
     }
 
     fun sendMsg() {
-        getAuthToken()?.let { userId ->
-            conversationId?.let { convId ->
-                textMsg.value?.let { text ->
-                    val newMsg = Message(
-                        contentText = text,
-                        senderId = userId,
-                        conversationId = convId,
-                        timestamp = Date().time
-                    )
-                    useCases.saveMessageLocal(newMsg)
-                        .compose(SchedulersUtils.applyAsyncSchedulersSingle())
-                        .subscribe(
-                            {
-                                Log.d("------>"," : saved")
-                                textMsg.value = ""
-                                sendMsgToRemote(newMsg.apply { id = it })
-                            },
-                            {
-                                onLoadFail(it)
-                            }
-                        ).apply {
-                            addDisposable(this)
-                        }
-                }
-            }
-        }
+        sendMsg(userId, conversationId, textMsg.value)
     }
 
-    private fun sendMsgToRemote(newMsg: Message) {
-        useCases.sendMessage(newMsg).compose(SchedulersUtils.applyAsyncSchedulersCompletable())
+    private fun sendMsg(userId: String?, convId: String?, text: String?) {
+        userId ?: return
+        convId ?: return
+        text ?: return
+        val newMsg = Message(
+            contentText = text,
+            senderId = userId,
+            conversationId = convId,
+            timestamp = Date().time
+        )
+        useCases.saveMessageLocal(newMsg)
+            .compose(SchedulersUtils.applyAsyncSchedulersSingle())
             .subscribe(
                 {
-                    Log.d("------>"," : sent")
+                    Log.d("------>", " : saved")
+                    textMsg.value = ""
+                    sendMsgToRemote(newMsg.apply { id = it })
                 },
                 {
                     onLoadFail(it)
@@ -114,5 +86,18 @@ class MessagingViewModel : PagingViewModel<Message>() {
             }
     }
 
-    private fun getAuthToken() = (authState.value as? AuthState.LoggedIn)?.token
+    private fun sendMsgToRemote(newMsg: Message) {
+        useCases.sendMessage(newMsg)
+            .compose(SchedulersUtils.applyAsyncSchedulersCompletable())
+            .subscribe(
+                {
+                    Log.d("------>", " : sent")
+                },
+                {
+                    onLoadFail(it)
+                }
+            ).apply {
+                addDisposable(this)
+            }
+    }
 }
