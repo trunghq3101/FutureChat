@@ -4,7 +4,6 @@ import com.miller.futurechat.framework.widget.ConversationPagingDataLoader
 import com.miller.futurechat.framework.widget.MessagePagingDataLoader
 import com.miller.futurechat.presentation.MainViewModel
 import com.miller.futurechat.presentation.conversations.ConversationsViewModel
-import com.miller.futurechat.presentation.login.LoginViewModel
 import com.miller.futurechat.presentation.messaging.MessagingViewModel
 import com.miller.futurechat.presentation.profile.ProfileViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -18,7 +17,6 @@ val viewModelModule = module {
     factory { MessagePagingDataLoader(get(), get()) }
     factory { ConversationPagingDataLoader(get(), get()) }
 
-    viewModel { LoginViewModel() }
     viewModel { MainViewModel() }
     viewModel { ConversationsViewModel() }
     viewModel { MessagingViewModel() }
