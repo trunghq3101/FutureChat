@@ -2,6 +2,7 @@ package com.miller.futurechat.framework.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.firebase.Timestamp
 import java.util.*
@@ -11,7 +12,8 @@ import java.util.*
  */
 
 @Entity(
-    tableName = "messages", foreignKeys = [ForeignKey(
+    tableName = "messages",
+    foreignKeys = [ForeignKey(
         entity = ConversationEntity::class,
         parentColumns = ["id"],
         childColumns = ["conversationId"]
