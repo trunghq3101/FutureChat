@@ -42,7 +42,7 @@ class PagingBoundaryCallback<Item>(
     }
 
     override fun onItemAtFrontLoaded(itemAtFront: Item) {
-        helper.runIfNotRunning(BEFORE, object : PagingRequestHelper.Request {
+        /*helper.runIfNotRunning(BEFORE, object : PagingRequestHelper.Request {
             override fun run(callback: PagingRequestHelper.Request.Callback) {
                 pagingDataLoader.fetchBefore(itemAtFront)
                     .subscribeOn(Schedulers.from(executor))
@@ -60,7 +60,7 @@ class PagingBoundaryCallback<Item>(
                     }
             }
 
-        })
+        })*/
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: Item) {

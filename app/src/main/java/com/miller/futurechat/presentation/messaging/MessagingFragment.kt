@@ -1,16 +1,19 @@
 package com.miller.futurechat.presentation.messaging
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.miller.core.data.Constants.PAGE_MAX_SIZE
 import com.miller.core.usecases.model.AuthState
 import com.miller.futurechat.BR
 import com.miller.futurechat.R
 import com.miller.futurechat.databinding.FragmentMessagingBinding
 import com.miller.futurechat.presentation.MainViewModel
 import com.miller.futurechat.presentation.base.BaseFragment
+import com.miller.futurechat.utils.findFirstVisiblePosition
 import com.miller.futurechat.utils.setupToolbar
 import kotlinx.android.synthetic.main.fragment_messaging.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -50,6 +53,7 @@ class MessagingFragment : BaseFragment<FragmentMessagingBinding, MessagingViewMo
         }
         with(viewModel) {
             pagedList.observe(viewLifecycleOwner, Observer {
+                Log.d("----->","MessagingFragment - observeField : submitList")
                 messagingAdapter.submitList(it)
             })
             networkState.observe(viewLifecycleOwner, Observer {
@@ -64,9 +68,13 @@ class MessagingFragment : BaseFragment<FragmentMessagingBinding, MessagingViewMo
             object : RecyclerView.AdapterDataObserver() {
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                     super.onItemRangeInserted(positionStart, itemCount)
-                    if (positionStart == 0) recyclerMessages.smoothScrollToPosition(
-                        positionStart
-                    )
+                    if (positionStart == 0 && (recyclerMessages.findFirstVisiblePosition() == positionStart || messagingAdapter.isFirstLoad)) {
+                        Log.d("----->","MessagingFragment - onItemRangeInserted : ")
+                        if (messagingAdapter.isFirstLoad) messagingAdapter.isFirstLoad = false
+                        recyclerMessages.smoothScrollToPosition(
+                            positionStart
+                        )
+                    }
                 }
             }
         val obsScrollBottomWhenKeyboardShowed =
@@ -80,7 +88,8 @@ class MessagingFragment : BaseFragment<FragmentMessagingBinding, MessagingViewMo
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     when (newState) {
-                        RecyclerView.SCROLL_STATE_IDLE -> if (viewModel.pagedList.value?.loadedCount ?: 0 > 40 && (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() == 0) {
+                        RecyclerView.SCROLL_STATE_IDLE -> if (viewModel.pagedList.value?.loadedCount ?: 0 > PAGE_MAX_SIZE && recyclerView.findFirstVisiblePosition() == 0) {
+                            Log.d("----->","MessagingFragment - onScrollStateChanged : ")
                             viewModel.pagedList.value?.dataSource?.invalidate()
                         }
                     }
