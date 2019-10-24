@@ -17,7 +17,8 @@ import java.util.*
         entity = ConversationEntity::class,
         parentColumns = ["id"],
         childColumns = ["conversationId"]
-    )]
+    )],
+    indices = [Index(value = ["id", "conversationId"])]
 )
 data class MessageEntity(
     @PrimaryKey(autoGenerate = true)

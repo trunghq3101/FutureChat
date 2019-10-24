@@ -29,7 +29,7 @@ class MessagePagingDataLoader(
     }
 
     override fun fetchBefore(firstItem: Message): Single<List<Message>> {
-        return useCases.loadPagedMessagesBefore(conversationId, firstItem.id)
+        return Single.just(listOf())
     }
 
     override fun fetchAfter(lastItem: Message?): Single<List<Message>> {
