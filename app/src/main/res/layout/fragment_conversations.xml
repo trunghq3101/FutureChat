@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -73,15 +72,23 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </Toolbar>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerConversations"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutTopics"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/conversations_search_m_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarConversations" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/pagerTopics"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="@dimen/conversations_search_m_top"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbarConversations"
-            tools:listitem="@layout/item_conversation" />
+            app:layout_constraintTop_toBottomOf="@+id/tabLayoutTopics" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
