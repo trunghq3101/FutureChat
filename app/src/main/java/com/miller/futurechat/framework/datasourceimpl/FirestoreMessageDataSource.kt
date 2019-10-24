@@ -108,8 +108,4 @@ class FirestoreMessageDataSource(
         .collection(MESSAGES)
         .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
 
-    private fun queryMessages(convId: String) = firestore.collection(CONVERSATIONS)
-        .document(convId)
-        .collection(MESSAGES)
-
 }
