@@ -17,14 +17,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_white">
+        android:padding="@dimen/conversations_padding">
 
         <Toolbar
             android:id="@+id/toolbarConversations"
             android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/color_white"
-            android:elevation="@dimen/toolbar_elevation"
+            android:layout_height="wrap_content"
+            android:contentInsetStart="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -39,9 +38,38 @@
                     android:layout_height="@dimen/conversations_profile_size"
                     app:clickSafe="@{ () -> viewModel.navigateToProfile() }"
                     app:glideCircularUrl="@{ userInfo.avatarUrl }"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btnStartTopic"
+                    style="@style/ButtonPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/conversations_start_topic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btnSearch"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/conversations_search_m_top"
+                    android:background="@drawable/conversations_bg_search"
+                    android:drawableStart="@drawable/ic_search"
+                    android:drawablePadding="@dimen/conversations_ic_search_padding"
+                    android:drawableTint="@color/color_grey"
+                    android:paddingStart="@dimen/conversations_search_p_start"
+                    android:paddingEnd="@dimen/conversations_search_p_start"
+                    android:text="@string/conversations_txt_search"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/color_grey"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnStartTopic" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </Toolbar>
 

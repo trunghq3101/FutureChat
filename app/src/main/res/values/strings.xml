@@ -3,4 +3,6 @@
     <string name="app_name">Future Chat</string>
     <string name="messaging_input_text_hint">Aa</string>
     <string name="profile_sign_out">Sign out</string>
+    <string name="conversations_start_topic">Start new topic</string>
+    <string name="conversations_txt_search">Search</string>
 </resources>

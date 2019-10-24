@@ -5,6 +5,7 @@
     <dimen name="conversations_avatar_padding_hor">18dp</dimen>
     <dimen name="conversations_item_padding_ver">18dp</dimen>
     <dimen name="conversations_content_margin_right">64dp</dimen>
+    <dimen name="conversations_profile_size">40dp</dimen>
 
     <dimen name="messaging_input_text_padding">12dp</dimen>
     <dimen name="messaging_bottom_margin">8dp</dimen>
@@ -22,6 +23,9 @@
     <dimen name="messaging_item_max_width">300sp</dimen>
     <dimen name="messaging_item_spacing">2dp</dimen>
     <dimen name="messaging_item_margin">17dp</dimen>
-    <dimen name="conversations_profile_size">40dp</dimen>
-
+    <dimen name="conversations_padding">10dp</dimen>
+    <dimen name="conversations_ic_search_padding">5dp</dimen>
+    <dimen name="conversations_search_radius">25dp</dimen>
+    <dimen name="conversations_search_m_top">10dp</dimen>
+    <dimen name="conversations_search_p_start">10dp</dimen>
 </resources>
