@@ -3,7 +3,6 @@ package com.miller.paging
 import androidx.paging.Config
 import androidx.paging.toLiveData
 import com.miller.paging.PagingBoundaryCallback.Companion.PAGE_SIZE
-import com.miller.paging.PagingConstants.MAX_PAGES_IN_MEMORY
 import java.util.concurrent.Executors
 
 /**
