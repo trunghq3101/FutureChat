@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ConversationGestureListener(
     private val recyclerView: RecyclerView,
-    private val viewModel: ConversationsViewModel
+    private val viewModel: BaseConversationViewModel
 ) : GestureDetector.SimpleOnGestureListener() {
 
     override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
@@ -15,7 +15,7 @@ class ConversationGestureListener(
             childView?.let {
                 val position = recyclerView.getChildAdapterPosition(it)
                 val conversationId =
-                    (recyclerView.adapter as ConversationAdapter).getItemAt(position)?.id
+                    (recyclerView.adapter as BaseConversationAdapter).getItemAt(position)?.id
                 conversationId?.let {
                     viewModel.navigate(ConversationsFragmentDirections.actionConversationsToMessaging(conversationId))
                 }

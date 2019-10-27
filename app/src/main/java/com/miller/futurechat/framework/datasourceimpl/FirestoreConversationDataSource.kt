@@ -16,16 +16,7 @@ class FirestoreConversationDataSource(
     private val firestore: FirebaseFirestore
 ) : ConversationDataSource {
 
-    override fun readAll(authToken: String): Single<List<Conversation>> {
-        return firestore.collection(CONVERSATIONS).whereArrayContains(FOLLOWERS, authToken)
-            .get()
-            .toSingle()
-            .map { querySnap ->
-                querySnap.toItemList(ConversationEntity::class.java).map { it.mapToDomain() }
-            }
-    }
-
-    override fun readPaging(authToken: String, lastConvId: String?): Single<List<Conversation>> {
+    override fun readPagedFollowing(authToken: String, lastConvId: String?): Single<List<Conversation>> {
         return lastConvId?.let {
             Single.create<List<Conversation>> { emitter ->
                 firestore.collection(CONVERSATIONS)

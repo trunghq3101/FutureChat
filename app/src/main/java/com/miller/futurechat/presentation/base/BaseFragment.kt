@@ -2,7 +2,6 @@ package com.miller.futurechat.presentation.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
