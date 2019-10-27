@@ -13,6 +13,6 @@ class LoadPagedConversations(
     private val conversationRepository: ConversationRepository
 ) {
     operator fun invoke(lastConvId: String?) = UseCaseUtils.withAuthenticated(authenticationRepository) {
-        conversationRepository.getPagingConversations(it, lastConvId)
+        conversationRepository.getPagedFollowing(it, lastConvId)
     }
 }

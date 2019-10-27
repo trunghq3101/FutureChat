@@ -1,10 +1,7 @@
 package com.miller.futurechat.presentation.conversations
 
-import android.view.GestureDetector
-import android.view.MotionEvent
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.RecyclerView
-import com.miller.core.usecases.model.AuthState
 import com.miller.futurechat.BR
 import com.miller.futurechat.R
 import com.miller.futurechat.databinding.FragmentConversationsBinding
@@ -20,49 +17,27 @@ class ConversationsFragment : BaseFragment<FragmentConversationsBinding, Convers
     override val bindingVar: Int = BR.viewModel
 
     private val mainViewModel: MainViewModel by sharedViewModel()
-    private val conversationAdapter = ConversationAdapter()
-    private val gestureDetector by lazy {
-        GestureDetector(context, ConversationGestureListener(recyclerConversations, viewModel))
+    private val topicPagerAdapter: TopicPagerAdapter by lazy {
+        TopicPagerAdapter(childFragmentManager)
     }
 
     override fun initView() {
         super.initView()
-        recyclerConversations.adapter = conversationAdapter
-        recyclerConversations.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
-            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
-            }
-
-            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                return gestureDetector.onTouchEvent(e)
-            }
-
-            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-            }
-        })
+        setupViewPager(childFragmentManager)
     }
 
     override fun observeField() {
         super.observeField()
         with(mainViewModel) {
-            authState.observe(viewLifecycleOwner, Observer {
-                when (it.peekContent()) {
-                    is AuthState.LoggedIn -> viewModel.loadConversations()
-                    is AuthState.LoggedOut -> showLoggedOutError()
-                }
-            })
             userInfo.observe(viewLifecycleOwner, Observer {
                 viewBinding.userInfo = it
             })
         }
-        with(viewModel) {
-            pagedList.observe(viewLifecycleOwner, Observer {
-                conversationAdapter.submitList(it)
-            })
-            networkState.observe(viewLifecycleOwner, Observer {
-                conversationAdapter.networkState = it
-            })
-        }
     }
 
-    private fun showLoggedOutError() {}
+    private fun setupViewPager(fm: FragmentManager?) {
+        fm ?: return
+        pagerTopics.adapter = topicPagerAdapter
+        tabLayoutTopics.setupWithViewPager(pagerTopics)
+    }
 }

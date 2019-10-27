@@ -13,7 +13,7 @@ import com.miller.futurechat.databinding.PagingItemStateBinding
 import com.miller.futurechat.presentation.model.mapToPresentation
 import com.miller.paging.PagingAdapter
 
-class ConversationAdapter : PagingAdapter<Conversation>(conversationDiff) {
+open class BaseConversationAdapter : PagingAdapter<Conversation>(conversationDiff) {
     override val adapterCallback: AdapterListUpdateCallback = AdapterListUpdateCallback(this)
     override val listUpdateCallback: ListUpdateCallback = WithNetworkStateListUpdateCallback(adapterCallback)
 

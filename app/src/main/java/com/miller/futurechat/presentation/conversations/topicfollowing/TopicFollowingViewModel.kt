@@ -1,14 +1,14 @@
 package com.miller.futurechat.presentation.conversations.topicfollowing
 
 import com.miller.core.usecases.UseCases
-import com.miller.futurechat.presentation.base.BaseViewModel
+import com.miller.futurechat.presentation.conversations.BaseConversationViewModel
 import org.koin.core.inject
 
 /**
  * Created by Miller on 24/10/2019
  */
 
-class TopicFollowingViewModel : BaseViewModel() {
+class TopicFollowingViewModel : BaseConversationViewModel() {
+    override val pagingDataLoader: TopicFollowingPagingDataLoader by inject()
     override val useCases: UseCases by inject()
-
 }
