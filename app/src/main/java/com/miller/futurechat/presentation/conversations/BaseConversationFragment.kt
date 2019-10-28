@@ -1,5 +1,6 @@
 package com.miller.futurechat.presentation.conversations
 
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import androidx.databinding.ViewDataBinding
@@ -48,6 +49,7 @@ abstract class BaseConversationFragment<ViewBinding : ViewDataBinding, ViewModel
         }
         with(viewModel) {
             pagedList.observe(viewLifecycleOwner, Observer {
+                Log.d("BaseConversation", "$it")
                 conversationAdapter.submitList(it)
             })
             networkState.observe(viewLifecycleOwner, Observer {

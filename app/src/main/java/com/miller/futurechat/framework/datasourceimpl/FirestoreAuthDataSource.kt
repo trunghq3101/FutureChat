@@ -21,7 +21,9 @@ class FirestoreAuthDataSource(
         return queryUser(token)
             .get()
             .toSingle()
-            .map { it.toObject(UserEntity::class.java)?.mapToDomain() }
+            .map { it.toObject(UserEntity::class.java)?.apply {
+                avatarUrl = "https://picsum.photos/id/237/200/300"
+            }?.mapToDomain() }
     }
 
     private fun queryUser(token: String) = firestore.collection(USERS).document(token)

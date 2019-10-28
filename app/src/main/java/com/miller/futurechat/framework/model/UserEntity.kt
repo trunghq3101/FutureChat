@@ -6,7 +6,7 @@ package com.miller.futurechat.framework.model
 
 data class UserEntity(
     val id: String,
-    val avatarUrl: String
+    var avatarUrl: String? = null
 ) {
     constructor() : this(
         id = "",

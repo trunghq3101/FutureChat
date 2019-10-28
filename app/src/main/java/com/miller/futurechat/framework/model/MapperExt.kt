@@ -17,7 +17,7 @@ fun MessageEntity.mapToDomain(): Message {
 }
 
 fun UserEntity.mapToDomain(): User {
-    return User(id, avatarUrl)
+    return User(id, avatarUrl ?: "")
 }
 
 fun Message.mapToFramework(): MessageEntity {

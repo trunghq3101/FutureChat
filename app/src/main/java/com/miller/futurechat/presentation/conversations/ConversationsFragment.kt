@@ -18,7 +18,7 @@ class ConversationsFragment : BaseFragment<FragmentConversationsBinding, Convers
 
     private val mainViewModel: MainViewModel by sharedViewModel()
     private val topicPagerAdapter: TopicPagerAdapter by lazy {
-        TopicPagerAdapter(childFragmentManager)
+        TopicPagerAdapter(requireContext(), childFragmentManager)
     }
 
     override fun initView() {
