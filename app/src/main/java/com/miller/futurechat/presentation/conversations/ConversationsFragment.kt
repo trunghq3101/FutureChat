@@ -2,6 +2,7 @@ package com.miller.futurechat.presentation.conversations
 
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.miller.futurechat.BR
 import com.miller.futurechat.R
 import com.miller.futurechat.databinding.FragmentConversationsBinding
@@ -31,6 +32,11 @@ class ConversationsFragment : BaseFragment<FragmentConversationsBinding, Convers
         with(mainViewModel) {
             userInfo.observe(viewLifecycleOwner, Observer {
                 viewBinding.userInfo = it
+            })
+        }
+        with(viewModel) {
+            toNewConversation.observe(viewLifecycleOwner, Observer {
+                if (it == true) findNavController().navigate(R.id.action_to_new_conversation)
             })
         }
     }

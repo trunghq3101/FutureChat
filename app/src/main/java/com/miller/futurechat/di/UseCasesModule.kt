@@ -11,6 +11,7 @@ val useCasesModule = module {
             LoadPagedMessagesAfter(get()),
             LoadPagedMessagesBefore(get()),
             LoadPagedConversations(get(), get()),
+            CreateNewConversation(get(), get()),
             SendMessage(get()),
             ReceiveMessage(get()),
             SaveMessageLocal(get())

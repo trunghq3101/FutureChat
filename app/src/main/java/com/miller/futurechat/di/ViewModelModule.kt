@@ -6,6 +6,7 @@ import com.miller.futurechat.presentation.conversations.ConversationsViewModel
 import com.miller.futurechat.presentation.conversations.topicfollowing.TopicFollowingPagingDataLoader
 import com.miller.futurechat.presentation.conversations.topicfollowing.TopicFollowingViewModel
 import com.miller.futurechat.presentation.messaging.MessagingViewModel
+import com.miller.futurechat.presentation.newconversation.NewConversationViewModel
 import com.miller.futurechat.presentation.profile.ProfileViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -23,4 +24,5 @@ val viewModelModule = module {
     viewModel { MessagingViewModel() }
     viewModel { ProfileViewModel() }
     viewModel { TopicFollowingViewModel() }
+    viewModel { NewConversationViewModel() }
 }
