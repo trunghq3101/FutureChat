@@ -10,7 +10,10 @@ object CollectionsConstant {
         const val USER_ID = "userId"
     }
     object ConversationsConstant {
+        const val AVATAR_URL = "avatarUrl"
         const val FOLLOWERS = "followers"
+        const val LAST_MESSAGE = "lastMessage"
+        const val TITLE = "title"
     }
     object MessagesConstant {
         const val TIMESTAMP = "timestamp"

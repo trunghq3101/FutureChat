@@ -6,6 +6,7 @@ data class UseCases(
     val loadPagedMessagesAfter: LoadPagedMessagesAfter,
     val loadPagedMessagesBefore: LoadPagedMessagesBefore,
     val loadPagedConversations: LoadPagedConversations,
+    val createNewConversation: CreateNewConversation,
     val sendMessage: SendMessage,
     val receiveMessage: ReceiveMessage,
     val saveMessageLocal: SaveMessageLocal
