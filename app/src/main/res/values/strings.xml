@@ -5,4 +5,7 @@
     <string name="profile_sign_out">Sign out</string>
     <string name="conversations_start_topic">Start new topic</string>
     <string name="conversations_txt_search">Search</string>
+    <string name="new_conversation_hint_title">Topic name</string>
+    <string name="new_conversation_hint_welcome_msg">Write an awesome welcome message...</string>
+    <string name="new_conversation_btn_submit">Submit</string>
 </resources>

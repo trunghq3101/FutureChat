@@ -1,5 +1,8 @@
 package com.miller.futurechat.presentation.newconversation
 
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
+import androidx.navigation.fragment.findNavController
 import com.miller.futurechat.BR
 import com.miller.futurechat.R
 import com.miller.futurechat.databinding.FragmentNewConversationBinding
@@ -16,5 +19,9 @@ class NewConversationFragment : BaseFragment<FragmentNewConversationBinding, New
     override fun initView() {
         super.initView()
         setupToolbar(toolbarNewConversation)
+        editTitle.requestFocus()
+        (activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)?.let {
+            it.showSoftInput(editTitle, InputMethodManager.SHOW_IMPLICIT)
+        }
     }
 }

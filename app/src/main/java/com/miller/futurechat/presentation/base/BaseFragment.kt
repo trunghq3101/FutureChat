@@ -51,9 +51,7 @@ abstract class BaseFragment<ViewBinding: ViewDataBinding, ViewModel: BaseViewMod
             navCommands.observe(viewLifecycleOwner, Observer {
                 when (it) {
                     is To -> findNavController().navigate(it.directions)
-                    is Back -> {
-                        // TODO: Handle back navigation
-                    }
+                    is Back -> findNavController().navigateUp()
                 }
             })
         }
