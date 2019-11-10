@@ -25,6 +25,12 @@ class NewConversationViewModel : BaseViewModel() {
             title = title.value!!,
             defaultMsg = defaultMsg.value!!
         ).compose(SchedulersUtils.applyAsyncSchedulersCompletable())
+            .doOnSubscribe {
+                showLoading()
+            }
+            .doFinally {
+                hideLoading()
+            }
             .subscribe(
                 {
                     navCommands.value = NavigationCommand.Back

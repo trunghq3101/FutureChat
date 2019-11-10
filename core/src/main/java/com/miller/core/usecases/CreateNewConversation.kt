@@ -2,11 +2,13 @@ package com.miller.core.usecases
 
 import com.miller.core.data.repository.AuthenticationRepository
 import com.miller.core.data.repository.NewConversationRepository
+import com.miller.core.data.repository.UserRepository
 import com.miller.core.domain.model.NewConversation
 import io.reactivex.Completable
 
 class CreateNewConversation(
     private val newConversationRepository: NewConversationRepository,
+    private val userRepository: UserRepository,
     private val authenticationRepository: AuthenticationRepository
 ) {
     operator fun invoke(
@@ -22,6 +24,8 @@ class CreateNewConversation(
                 title = title,
                 lastMessage = defaultMsg
             )
-        )
+        ).flatMapCompletable {
+            userRepository.addConversation(userId, it)
+        }
     }
 }

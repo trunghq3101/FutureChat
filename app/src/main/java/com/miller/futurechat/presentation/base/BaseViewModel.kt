@@ -22,12 +22,23 @@ abstract class BaseViewModel : ViewModel(), KoinComponent {
     val navCommands =
         SingleLiveEvent<NavigationCommand>()
 
+    val isLoading =
+        SingleLiveEvent<Boolean>()
+
     fun navigate(directions: NavDirections) {
         navCommands.postValue(NavigationCommand.To(directions))
     }
 
     fun addDisposable(disposable: Disposable) {
         compositeDisposable.add(disposable)
+    }
+
+    fun showLoading() {
+        isLoading.value = true
+    }
+
+    fun hideLoading() {
+        isLoading.value = false
     }
 
     fun onLoadFail(t: Throwable?) {

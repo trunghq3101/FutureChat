@@ -22,7 +22,7 @@
     </style>
 
     <style name="ButtonPrimary">
-        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:backgroundTint">@color/selector_btn_primary</item>
         <item name="android:textColor">@color/color_white</item>
     </style>
 

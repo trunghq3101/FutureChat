@@ -18,4 +18,7 @@ object CollectionsConstant {
     object MessagesConstant {
         const val TIMESTAMP = "timestamp"
     }
+    object UsersConstant {
+        const val CONVERSATIONS = "conversations"
+    }
 }

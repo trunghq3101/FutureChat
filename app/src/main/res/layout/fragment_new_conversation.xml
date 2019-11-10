@@ -56,9 +56,20 @@
             android:layout_marginTop="20dp"
             android:onClick="@{ () -> viewModel.saveNewConversation() }"
             android:text="@string/new_conversation_btn_submit"
+            app:isLoading="@{ viewModel.isLoading }"
             app:layout_constraintEnd_toEndOf="@id/editWelcomeMsg"
             app:layout_constraintStart_toStartOf="@id/editWelcomeMsg"
             app:layout_constraintTop_toBottomOf="@id/editWelcomeMsg" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progressLoading"
+            android:layout_width="@dimen/common_btn_progress"
+            android:layout_height="0dp"
+            android:layout_marginEnd="5dp"
+            app:isLoading="@{ viewModel.isLoading }"
+            app:layout_constraintBottom_toBottomOf="@id/btnSubmit"
+            app:layout_constraintEnd_toStartOf="@id/btnSubmit"
+            app:layout_constraintTop_toTopOf="@id/btnSubmit" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
