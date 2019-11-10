@@ -33,4 +33,5 @@ val dataSourceModule = module {
     single<RemoteMessageDataSource> { FirestoreMessageDataSource(get()) }
     single<LocalMessageDataSource> { RoomDbMessageDataSource(get()) }
     single<NewConversationDataSource> { FirestoreNewConversationDataSource(get()) }
+    single<UserDataSource> { FirestoreUserDataSource(get()) }
 }

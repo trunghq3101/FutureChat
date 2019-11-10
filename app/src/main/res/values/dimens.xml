@@ -28,4 +28,5 @@
     <dimen name="conversations_search_radius">25dp</dimen>
     <dimen name="conversations_search_m_top">10dp</dimen>
     <dimen name="conversations_search_p_start">10dp</dimen>
+    <dimen name="common_btn_progress">20dp</dimen>
 </resources>

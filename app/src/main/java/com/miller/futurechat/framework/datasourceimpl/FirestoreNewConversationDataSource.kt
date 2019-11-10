@@ -8,14 +8,14 @@ import com.miller.futurechat.framework.firestore.CollectionsConstant.Conversatio
 import com.miller.futurechat.framework.firestore.CollectionsConstant.ConversationsConstant.FOLLOWERS
 import com.miller.futurechat.framework.firestore.CollectionsConstant.ConversationsConstant.LAST_MESSAGE
 import com.miller.futurechat.framework.firestore.CollectionsConstant.ConversationsConstant.TITLE
-import com.miller.futurechat.utils.toCompletable
-import io.reactivex.Completable
+import com.miller.futurechat.utils.toSingle
+import io.reactivex.Single
 
 class FirestoreNewConversationDataSource(
     private val firestore: FirebaseFirestore
 ) : NewConversationDataSource {
 
-    override fun create(cv: NewConversation): Completable {
+    override fun create(cv: NewConversation): Single<String> {
         return firestore.collection(CONVERSATIONS)
             .add(hashMapOf(
                 AVATAR_URL to cv.avatarUrl,
@@ -23,7 +23,8 @@ class FirestoreNewConversationDataSource(
                 LAST_MESSAGE to cv.lastMessage,
                 TITLE to cv.title
             ))
-            .toCompletable()
+            .toSingle()
+            .map { it.id }
     }
 
 }
