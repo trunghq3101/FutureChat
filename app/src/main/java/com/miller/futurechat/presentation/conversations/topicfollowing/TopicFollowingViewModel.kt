@@ -1,6 +1,5 @@
 package com.miller.futurechat.presentation.conversations.topicfollowing
 
-import com.miller.core.usecases.UseCases
 import com.miller.futurechat.presentation.conversations.BaseConversationViewModel
 import org.koin.core.inject
 
@@ -10,5 +9,4 @@ import org.koin.core.inject
 
 class TopicFollowingViewModel : BaseConversationViewModel() {
     override val pagingDataLoader: TopicFollowingPagingDataLoader by inject()
-    override val useCases: UseCases by inject()
 }

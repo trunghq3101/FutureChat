@@ -1,4 +1,4 @@
-package com.miller.futurechat.presentation.conversations.topicfollowing
+package com.miller.futurechat.presentation.conversations.topicnewest
 
 import androidx.paging.DataSource
 import com.miller.core.data.repository.AuthenticationRepository
@@ -10,28 +10,21 @@ import com.miller.futurechat.framework.model.mapToFramework
 import com.miller.paging.PagingDataLoader
 import io.reactivex.Single
 
-class TopicFollowingPagingDataLoader(
+class TopicNewestPagingDataLoader(
     private val authenticationRepository: AuthenticationRepository,
     private val conversationRepository: ConversationRepository,
     private val appDao: AppDao
 ) : PagingDataLoader<Conversation> {
     override fun fetchPageFromLocal(): DataSource.Factory<Int, Conversation> {
-        return appDao.getFollowingConversations().map {
-            it.mapToDomain()
-        }
+        return appDao.getNewestConversations().map { it.mapToDomain() }
     }
 
     override fun fetchBefore(firstItem: Conversation): Single<List<Conversation>> {
-        return Single.create { emitter ->
-            emitter.onSuccess(listOf())
-        }
+        return Single.just(listOf())
     }
 
     override fun fetchAfter(lastItem: Conversation?): Single<List<Conversation>> {
-        return conversationRepository.getPagedFollowing(
-            authenticationRepository.getToken(),
-            lastItem?.id
-        )
+        return conversationRepository.getPagedNewest(lastItem?.id)
     }
 
     override fun savePageToLocal(items: List<Conversation>): Single<List<Long>> {
@@ -51,7 +44,7 @@ class TopicFollowingPagingDataLoader(
     }
 
     override fun clearPageInLocal(): Single<Void> {
-        return appDao.clearConversations()
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }
